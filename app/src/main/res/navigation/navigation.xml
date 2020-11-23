@@ -6,14 +6,6 @@
     app:startDestination="@id/todoListFragment">
     <fragment
         android:id="@+id/todoListFragment"
-        android:name="com.kagan.to_dolist.ui.TodoListFragment"
-        android:label="TodoListFragment" >
-        <action
-            android:id="@+id/action_todoListFragment_to_testFragment"
-            app:destination="@id/testFragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/testFragment"
-        android:name="com.kagan.to_dolist.ui.TestFragment"
-        android:label="TestFragment" />
+        android:name="com.kagan.to_dolist.ui.CategoryFragment"
+        android:label="TodoListFragment" />
 </navigation>

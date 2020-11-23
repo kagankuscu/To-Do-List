@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">To-Do List</string>
+    <string name="add_new_category">add new category</string>
+    <string name="projects">Projects</string>
+    <string name="task_0">0 Task</string>
+    <string name="personal">Personal</string>
+    <string name="personalImage">personalImage</string>
+    <string name="meeting">Meeting</string>
+    <string name="meetingImage">meetingImage</string>
 </resources>
