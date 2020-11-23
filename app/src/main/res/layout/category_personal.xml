@@ -22,7 +22,8 @@
                 android:layout_gravity="center"
                 android:layout_marginStart="18dp"
                 android:layout_marginEnd="18dp"
-                android:contentDescription="@string/personalImage" />
+                android:contentDescription="@string/personalImage"
+                android:src="@drawable/ic_personal" />
 
             <TextView
                 android:id="@+id/tvCategory"
