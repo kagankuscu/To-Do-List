@@ -1,11 +1,13 @@
 package com.kagan.to_dolist.ui
 
 import android.app.AlertDialog
-import android.app.Dialog
 import android.content.DialogInterface
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.TextView
+import android.widget.Toast
+import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
 import com.kagan.to_dolist.R
 import com.kagan.to_dolist.databinding.FragmentCategoryBinding
@@ -16,7 +18,6 @@ class CategoryFragment : Fragment(R.layout.fragment_category) {
     private val TAG = "CategoryFragment"
     private lateinit var binding: FragmentCategoryBinding
     private lateinit var layout: View
-    private var layoutId = -1
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -39,10 +40,14 @@ class CategoryFragment : Fragment(R.layout.fragment_category) {
                     d.getButton(AlertDialog.BUTTON_POSITIVE).isEnabled = true
 
                     when (which) {
-                        0 -> layout =
-                            layoutInflater.inflate(R.layout.category_personal, null, false)
-                        1 -> layout =
-                            layoutInflater.inflate(R.layout.category_work, null, false)
+                        0 -> {
+                            layout =
+                                layoutInflater.inflate(R.layout.category_personal, null, false)
+                        }
+                        1 -> {
+                            layout =
+                                layoutInflater.inflate(R.layout.category_work, null, false)
+                        }
                         2 -> layout =
                             layoutInflater.inflate(R.layout.category_meeting, null, false)
                         3 -> layout =
@@ -50,6 +55,7 @@ class CategoryFragment : Fragment(R.layout.fragment_category) {
                         4 -> layout =
                             layoutInflater.inflate(R.layout.category_study, null, false)
                     }
+                    setCardViewClickListener()
                 })
             .setPositiveButton(
                 getString(R.string.btn_add),
@@ -65,5 +71,29 @@ class CategoryFragment : Fragment(R.layout.fragment_category) {
             .show()
 
         l.getButton(AlertDialog.BUTTON_POSITIVE).isEnabled = false
+    }
+
+    private fun setCardViewClickListener() {
+        val text = layout.findViewById<TextView>(R.id.tvCategory).text
+
+        layout.findViewById<CardView>(R.id.cardView).setOnClickListener {
+            Log.d(TAG, "addView: $layout")
+            Toast.makeText(
+                context,
+                text,
+                Toast.LENGTH_SHORT
+            ).show()
+        }
+    }
+
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        // TODO: 23-Nov-20 datastore read function
+    }
+
+    override fun onStop() {
+        super.onStop()
+        // TODO: 23-Nov-20 datastore write function
     }
 }

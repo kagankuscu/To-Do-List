@@ -12,4 +12,5 @@
     <color name="dark_blue">#3867D5</color>
     <color name="dark_blue_900">#3867b5</color>
     <color name="light_blue_200">#ee81C7F5</color>
+    <color name="project_text">#8B87B3</color>
 </resources>
