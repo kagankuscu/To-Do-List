@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="dashboard">120dp</dimen>
+
+    <dimen name="dashboard_hello_margin_top">8dp</dimen>
+    <dimen name="dashboard_name_margin_top">4dp</dimen>
+
+    <dimen name="hello_text_size">48sp</dimen>
+    <dimen name="name_text_size">34sp</dimen>
+
+    <dimen name="project_margin_top">12dp</dimen>
+    <dimen name="project_text_size">14sp</dimen>
+
+    <dimen name="scroll_height">0dp</dimen>
+    <dimen name="scroll_margin_start">16dp</dimen>
+    <dimen name="scroll_margin_end">16dp</dimen>
+
+    <dimen name="card_view_margin">4dp</dimen>
+    <dimen name="card_view_padding">28dp</dimen>
+    <dimen name="card_view_image_size">48dp</dimen>
+    <dimen name="card_view_image_margin_start">16dp</dimen>
+    <dimen name="card_view_image_margin_end">16dp</dimen>
+    <dimen name="card_view_text_margin_top">4dp</dimen>
+    <dimen name="card_view_category_name_text_size">20sp</dimen>
+    <dimen name="card_view_task_margin_top">12dp</dimen>
+    <dimen name="card_view_task_text_size">14sp</dimen>
+
+    <dimen name="fab_margin_end">32dp</dimen>
+    <dimen name="fab_margin_bottom">32dp</dimen>
+
+    <dimen name="guide_line_begin">16dp</dimen>
+    <dimen name="guide_line_end">16dp</dimen>
+
+</resources>

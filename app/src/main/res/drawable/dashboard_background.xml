@@ -3,9 +3,9 @@
     android:shape="rectangle">
     <gradient
         android:angle="-45"
-        android:endColor="@color/light_blue"
         android:centerColor="@color/light_blue_200"
+        android:endColor="@color/light_blue"
         android:startColor="@color/dark_blue" />
 
-    <size android:height="200dp" />
+    <size android:height="@dimen/dashboard" />
 </shape>
