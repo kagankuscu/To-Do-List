@@ -17,4 +17,5 @@
     <string name="btn_add">Add</string>
     <string name="dashboard">dashboard</string>
     <string name="hello">Hello</string>
+    <string name="category_already_exists">Category Already Exists</string>
 </resources>
