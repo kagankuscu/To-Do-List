@@ -15,4 +15,6 @@
     <string name="shoppingImage">shoppingImage</string>
     <string name="add_category">Add Category</string>
     <string name="btn_add">Add</string>
+    <string name="dashboard">dashboard</string>
+    <string name="hello">Hello</string>
 </resources>

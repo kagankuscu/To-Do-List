@@ -7,21 +7,21 @@
         android:id="@+id/cardView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="12dp"
-        android:theme="@style/Theme.MaterialComponents.DayNight">
+        android:layout_margin="@dimen/card_view_margin"
+        android:theme="@style/Theme.MaterialComponents.Light">
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="32dp">
+            android:padding="@dimen/card_view_padding">
 
             <ImageView
-                android:layout_width="56dp"
-                android:layout_height="56dp"
+                android:layout_width="@dimen/card_view_image_size"
+                android:layout_height="@dimen/card_view_image_size"
                 android:layout_gravity="center"
-                android:layout_marginStart="18dp"
-                android:layout_marginEnd="18dp"
+                android:layout_marginStart="@dimen/card_view_image_margin_start"
+                android:layout_marginEnd="@dimen/card_view_image_margin_end"
                 android:contentDescription="@string/workImage"
                 android:src="@drawable/ic_work" />
 
@@ -30,17 +30,17 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="@dimen/card_view_text_margin_top"
                 android:text="@string/work"
-                android:textSize="20sp" />
+                android:textSize="@dimen/card_view_category_name_text_size" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginTop="12dp"
+                android:layout_marginTop="@dimen/card_view_task_margin_top"
                 android:text="@string/task_0"
-                android:textSize="14sp" />
+                android:textSize="@dimen/card_view_task_text_size" />
         </LinearLayout>
     </com.google.android.material.card.MaterialCardView>
 </LinearLayout>
