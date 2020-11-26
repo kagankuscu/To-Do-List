@@ -35,7 +35,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/dashboard_name_margin_top"
-        android:text="Name"
         android:textColor="@color/white"
         android:textSize="@dimen/name_text_size"
         app:layout_constraintEnd_toEndOf="@+id/tvWelcome"
