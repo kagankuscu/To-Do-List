@@ -10,6 +10,7 @@ import android.widget.Toast
 import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import com.kagan.to_dolist.R
 import com.kagan.to_dolist.constants.Constant.MEETING
 import com.kagan.to_dolist.constants.Constant.PERSONAL
@@ -149,6 +150,7 @@ class CategoryFragment : Fragment(R.layout.fragment_category) {
                 text,
                 Toast.LENGTH_SHORT
             ).show()
+            findNavController().navigate(R.id.action_todoListFragment_to_taskFragment)
         }
     }
 
