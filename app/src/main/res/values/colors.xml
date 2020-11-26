@@ -6,6 +6,7 @@
     <color name="teal_200">#FF03DAC5</color>
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
+    <color name="black_100">#a1000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="background">#F9FCFF</color>
     <color name="light_blue">#81C7F5</color>
@@ -13,4 +14,12 @@
     <color name="dark_blue_900">#3867b5</color>
     <color name="light_blue_200">#ee81C7F5</color>
     <color name="project_text">#8B87B3</color>
+    <color name="task_text">#8B87B3</color>
+    <color name="task_desc_text">#554E8F</color>
+
+    <color name="personal_icon">#feeb70</color>
+    <color name="meeting_icon">#ff52a8</color>
+    <color name="shopping_icon">#3867d5</color>
+    <color name="study_icon">#bf0080</color>
+    <color name="work_icon">#1ed102</color>
 </resources>

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/cardView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/card_view_margin"
+        android:theme="@style/Theme.MaterialComponents.Light">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:contentDescription="@string/personalImage"
+            android:src="@drawable/task_personal" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/task_cv_padding">
+
+            <com.google.android.material.radiobutton.MaterialRadioButton
+                android:id="@+id/radioIsDone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/task_radio_cv_margin_start"
+                android:text="@string/personal"
+                android:textColor="@color/black_100"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tvTaskDesc"
+                android:layout_width="@dimen/task_decs_width"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/task_cv_margin_start"
+                android:text="test today's task is design task UI"
+                android:textColor="@color/task_desc_text"
+                android:textSize="@dimen/card_view_category_name_text_size"
+                app:layout_constraintBottom_toBottomOf="@+id/radioIsDone"
+                app:layout_constraintStart_toEndOf="@id/radioIsDone"
+                app:layout_constraintTop_toTopOf="@id/radioIsDone" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </com.google.android.material.card.MaterialCardView>
+</LinearLayout>

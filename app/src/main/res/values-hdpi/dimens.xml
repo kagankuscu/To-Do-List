@@ -10,6 +10,9 @@
     <dimen name="project_margin_top">8dp</dimen>
     <dimen name="project_text_size">12sp</dimen>
 
+    <dimen name="task_margin_top">8dp</dimen>
+    <dimen name="task_text_size">12sp</dimen>
+
     <dimen name="scroll_height">0dp</dimen>
     <dimen name="scroll_margin_start">16dp</dimen>
     <dimen name="scroll_margin_end">16dp</dimen>
@@ -29,5 +32,6 @@
 
     <dimen name="guide_line_begin">16dp</dimen>
     <dimen name="guide_line_end">16dp</dimen>
+    <dimen name="task_cv_padding">12dp</dimen>
 
 </resources>
