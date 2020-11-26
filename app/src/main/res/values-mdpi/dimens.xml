@@ -34,5 +34,7 @@
     <dimen name="guide_line_begin">16dp</dimen>
     <dimen name="guide_line_end">16dp</dimen>
     <dimen name="task_cv_padding">12dp</dimen>
+    <dimen name="task_time_margin_start">12dp</dimen>
+    <dimen name="guideline_task_text">120dp</dimen>
 
 </resources>

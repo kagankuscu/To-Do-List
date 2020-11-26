@@ -36,5 +36,7 @@
     <dimen name="task_cv_margin_start">18dp</dimen>
     <dimen name="task_decs_width">200dp</dimen>
     <dimen name="task_radio_cv_margin_start">16dp</dimen>
+    <dimen name="task_time_margin_start">12dp</dimen>
+    <dimen name="guideline_task_text">120dp</dimen>
 
 </resources>
