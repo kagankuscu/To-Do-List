@@ -35,7 +35,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/dashboard_name_margin_top"
-        android:text="Name"
         android:textColor="@color/white"
         android:textSize="@dimen/name_text_size"
         app:layout_constraintEnd_toEndOf="@+id/tvWelcome"
@@ -55,6 +54,7 @@
 
 
     <androidx.core.widget.NestedScrollView
+        android:id="@+id/nsvView"
         android:layout_width="match_parent"
         android:layout_height="@dimen/scroll_height"
         android:layout_marginStart="@dimen/scroll_margin_start"
@@ -69,10 +69,10 @@
             android:layout_height="match_parent">
 
             <GridLayout
-                android:id="@+id/gLCategory"
-                android:layout_width="wrap_content"
+                android:id="@+id/gLTask"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:columnCount="2"
+                android:columnCount="1"
                 android:orientation="horizontal"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
