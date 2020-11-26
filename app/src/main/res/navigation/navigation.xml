@@ -16,5 +16,9 @@
         android:id="@+id/taskFragment"
         android:name="com.kagan.to_dolist.ui.TaskFragment"
         android:label="fragment_task"
-        tools:layout="@layout/fragment_task" />
+        tools:layout="@layout/fragment_task" >
+        <argument
+            android:name="category"
+            app:argType="string" />
+    </fragment>
 </navigation>

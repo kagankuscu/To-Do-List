@@ -27,7 +27,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/task_radio_cv_margin_start"
-                android:text="@string/personal"
+                android:text="10:00 am"
                 android:textColor="@color/black_100"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
