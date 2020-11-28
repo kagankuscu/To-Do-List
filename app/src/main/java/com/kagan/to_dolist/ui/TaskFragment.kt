@@ -3,6 +3,7 @@ package com.kagan.to_dolist.ui
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.kagan.to_dolist.R
 import com.kagan.to_dolist.constants.Constant.MEETING
@@ -25,22 +26,11 @@ class TaskFragment : Fragment(R.layout.fragment_task) {
         binding.tvName.text = safeargs.category
 
         binding.btnAdd.setOnClickListener {
-            addTask()
+            navigateToAddTask()
         }
     }
 
-    private fun addTask() {
-        var layout: View? = null
-        when (safeargs.category) {
-            PERSONAL -> layout = layoutInflater.inflate(R.layout.task_personal, null, false)
-            MEETING -> layout = layoutInflater.inflate(R.layout.task_meeting, null, false)
-            SHOPPING -> layout = layoutInflater.inflate(R.layout.task_shopping, null, false)
-            STUDY -> layout = layoutInflater.inflate(R.layout.task_study, null, false)
-            WORK -> layout = layoutInflater.inflate(R.layout.task_work, null, false)
-        }
-
-        layout?.let {
-            binding.gLTask.addView(it)
-        }
+    private fun navigateToAddTask() {
+        findNavController().navigate(R.id.action_taskFragment_to_newTaskFragment)
     }
 }
