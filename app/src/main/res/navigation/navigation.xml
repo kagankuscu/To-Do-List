@@ -20,5 +20,12 @@
         <argument
             android:name="category"
             app:argType="string" />
+        <action
+            android:id="@+id/action_taskFragment_to_newTaskFragment"
+            app:destination="@id/newTaskFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/newTaskFragment"
+        android:name="com.kagan.to_dolist.ui.NewTaskFragment"
+        android:label="NewTaskFragment" />
 </navigation>
