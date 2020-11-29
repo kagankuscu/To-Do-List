@@ -9,6 +9,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.kagan.to_dolist.R
@@ -27,13 +28,7 @@ class CategoryFragment : Fragment(R.layout.fragment_category) {
     private lateinit var binding: FragmentCategoryBinding
     private lateinit var layout: View
     private lateinit var dataStoreViewModel: DataStoreViewModel
-    private var saveCategory = mutableMapOf(
-        PERSONAL to false,
-        MEETING to false,
-        SHOPPING to false,
-        STUDY to false,
-        WORK to false
-    )
+    private lateinit var saveCategory: Map<String, Boolean>
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -42,6 +37,11 @@ class CategoryFragment : Fragment(R.layout.fragment_category) {
         binding.btnAdd.setOnClickListener {
             addView()
         }
+
+        dataStoreViewModel.getCategory().observe(viewLifecycleOwner, {
+            saveCategory = it
+            Log.d(TAG, "value: $it ")
+        })
     }
 
     private fun addView() {
@@ -56,8 +56,6 @@ class CategoryFragment : Fragment(R.layout.fragment_category) {
                     dialog as AlertDialog
                     dialog.getButton(AlertDialog.BUTTON_POSITIVE).isEnabled = true
                     categoryArray = resources.getStringArray(R.array.categories)[which]
-
-                    Log.d(TAG, "addView: ${saveCategory.entries}")
 
                     if (saveCategory[categoryArray] != true) {
                         setLayout(which)
@@ -77,7 +75,9 @@ class CategoryFragment : Fragment(R.layout.fragment_category) {
                     if (this::layout.isInitialized) {
                         try {
                             binding.gLCategory.addView(layout)
-                            saveCategory[categoryArray] = true
+                            val categoriesMap = saveCategory.toMutableMap()
+                            categoriesMap[categoryArray] = true
+                            dataStoreViewModel.saved(categoriesMap)
                         } catch (e: Exception) {
                             Sentry.captureMessage(e.message.toString())
                         }
@@ -90,56 +90,62 @@ class CategoryFragment : Fragment(R.layout.fragment_category) {
 
     private fun setLayout(which: Int? = -1) {
         when (which) {
-            0 -> {
-                layout =
-                    layoutInflater.inflate(R.layout.category_personal, null, false)
-            }
-            1 -> {
-                layout =
-                    layoutInflater.inflate(R.layout.category_work, null, false)
-            }
-            2 -> layout =
+            0 -> layout =
+                layoutInflater.inflate(R.layout.category_personal, null, false)
+            1 -> layout =
                 layoutInflater.inflate(R.layout.category_meeting, null, false)
-            3 -> layout =
+            2 -> layout =
                 layoutInflater.inflate(R.layout.category_shopping, null, false)
-            4 -> layout =
+            3 -> layout =
                 layoutInflater.inflate(R.layout.category_study, null, false)
+            4 -> layout =
+                layoutInflater.inflate(R.layout.category_work, null, false)
         }
     }
 
     private fun setPersonalCard() {
-        layout =
-            layoutInflater.inflate(R.layout.category_personal, null, false)
-        setCardViewClickListener()
-        binding.gLCategory.addView(layout)
+        if (saveCategory[PERSONAL] == true) {
+            layout =
+                layoutInflater.inflate(R.layout.category_personal, null, false)
+            setCardViewClickListener()
+            binding.gLCategory.addView(layout)
+        }
     }
 
     private fun setMeetingCard() {
-        layout =
-            layoutInflater.inflate(R.layout.category_meeting, null, false)
-        setCardViewClickListener()
-        binding.gLCategory.addView(layout)
+        if (saveCategory[MEETING] == true) {
+            layout =
+                layoutInflater.inflate(R.layout.category_meeting, null, false)
+            setCardViewClickListener()
+            binding.gLCategory.addView(layout)
+        }
     }
 
     private fun setShoppingCard() {
-        layout =
-            layoutInflater.inflate(R.layout.category_shopping, null, false)
-        setCardViewClickListener()
-        binding.gLCategory.addView(layout)
+        if (saveCategory[SHOPPING] == true) {
+            layout =
+                layoutInflater.inflate(R.layout.category_shopping, null, false)
+            setCardViewClickListener()
+            binding.gLCategory.addView(layout)
+        }
     }
 
     private fun setStudyCard() {
-        layout =
-            layoutInflater.inflate(R.layout.category_study, null, false)
-        setCardViewClickListener()
-        binding.gLCategory.addView(layout)
+        if (saveCategory[STUDY] == true) {
+            layout =
+                layoutInflater.inflate(R.layout.category_study, null, false)
+            setCardViewClickListener()
+            binding.gLCategory.addView(layout)
+        }
     }
 
     private fun setWorkCard() {
-        layout =
-            layoutInflater.inflate(R.layout.category_work, null, false)
-        setCardViewClickListener()
-        binding.gLCategory.addView(layout)
+        if (saveCategory[WORK] == true) {
+            layout =
+                layoutInflater.inflate(R.layout.category_work, null, false)
+            setCardViewClickListener()
+            binding.gLCategory.addView(layout)
+        }
     }
 
     private fun setCardViewClickListener() {
@@ -157,58 +163,29 @@ class CategoryFragment : Fragment(R.layout.fragment_category) {
         }
     }
 
-    private fun observeDataStore() {
-        dataStoreViewModel.personal.observe(this, {
-            saveCategory[PERSONAL] = it
-            if (it)
-                setPersonalCard()
-        })
-
-        dataStoreViewModel.meeting.observe(this, {
-            saveCategory[MEETING] = it
-            if (it)
-                setMeetingCard()
-        })
-
-        dataStoreViewModel.shopping.observe(this, {
-            saveCategory[SHOPPING] = it
-            if (it)
-                setShoppingCard()
-        })
-
-        dataStoreViewModel.study.observe(this, {
-            saveCategory[STUDY] = it
-            if (it)
-                setStudyCard()
-        })
-
-        dataStoreViewModel.work.observe(this, {
-            saveCategory[WORK] = it
-            if (it)
-                setWorkCard()
-        })
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        dataStoreViewModel = ViewModelProvider(this).get(DataStoreViewModel::class.java)
+        dataStoreViewModel =
+            ViewModelProvider(this).get(DataStoreViewModel::class.java)
+
+        saveCategory = dataStoreViewModel.getCategory().value!!
+
+        Log.d(TAG, "onCreate: ${dataStoreViewModel.getCategory().value}")
     }
 
     override fun onStart() {
         super.onStart()
-        Log.d(TAG, "onStart: $saveCategory")
-        observeDataStore()
+        Log.d(TAG, "onStart: ${dataStoreViewModel.getCategory().value}")
+
+        setPersonalCard()
+        setMeetingCard()
+        setShoppingCard()
+        setStudyCard()
+        setWorkCard()
     }
 
     override fun onStop() {
         super.onStop()
-        Log.d(TAG, "onStop: $saveCategory ")
-        dataStoreViewModel.saveCategory(
-            personal = saveCategory[PERSONAL]!!,
-            meeting = saveCategory[MEETING]!!,
-            shopping = saveCategory[SHOPPING]!!,
-            study = saveCategory[STUDY]!!,
-            work = saveCategory[WORK]!!
-        )
+        binding.gLCategory.removeAllViews()
     }
 }

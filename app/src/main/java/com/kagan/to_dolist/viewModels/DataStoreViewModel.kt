@@ -1,32 +1,32 @@
 package com.kagan.to_dolist.viewModels
 
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.asLiveData
-import androidx.lifecycle.viewModelScope
-import com.kagan.to_dolist.dataStorePreferences.CategoryRepository
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import android.util.Log
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import com.kagan.to_dolist.repositories.CategoryRepository
 
-class DataStoreViewModel(application: Application) : AndroidViewModel(application) {
+class DataStoreViewModel : ViewModel() {
 
-    private var categoryRepo = CategoryRepository(application)
+    private val TAG = "ViewModel"
+    private var repository: CategoryRepository = CategoryRepository.getInstance()
+    private var categories = MutableLiveData<Map<String, Boolean>>()
 
-    val personal = categoryRepo.getPersonalFlow.asLiveData()
-    val meeting = categoryRepo.getMeetingFlow.asLiveData()
-    val shopping = categoryRepo.getShoppingFlow.asLiveData()
-    val study = categoryRepo.getStudyFlow.asLiveData()
-    val work = categoryRepo.getWorkFlow.asLiveData()
+    init {
+        Log.d(TAG, "init: ViewModel")
+        Log.d(TAG, "repo: $repository")
+        categories = repository.getCategory()
+        Log.d(TAG, "categories: ${categories.value} ")
+    }
 
-    fun saveCategory(
-        personal: Boolean,
-        meeting: Boolean,
-        shopping: Boolean,
-        study: Boolean,
-        work: Boolean
-    ) {
-        viewModelScope.launch(Dispatchers.IO) {
-            categoryRepo.saveCategory(personal, meeting, shopping, study, work)
-        }
+
+    fun getCategory(): LiveData<Map<String, Boolean>> {
+        return categories
+    }
+
+    fun saved(categoriesMap: Map<String, Boolean>) {
+        categories.value = categoriesMap
+
+        repository.saveCategory()
     }
 }
