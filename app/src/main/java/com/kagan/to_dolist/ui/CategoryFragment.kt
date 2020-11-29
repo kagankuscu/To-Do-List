@@ -10,7 +10,6 @@ import android.widget.Toast
 import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.fragment.FragmentNavigatorDestinationBuilder
 import androidx.navigation.fragment.findNavController
 import com.kagan.to_dolist.R
 import com.kagan.to_dolist.constants.Constant.MEETING
@@ -89,63 +88,64 @@ class CategoryFragment : Fragment(R.layout.fragment_category) {
         alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).isEnabled = false
     }
 
-    private fun restoreCards() {
-        setLayout(restore = true)
+    private fun setLayout(which: Int? = -1) {
+        when (which) {
+            0 -> {
+                layout =
+                    layoutInflater.inflate(R.layout.category_personal, null, false)
+            }
+            1 -> {
+                layout =
+                    layoutInflater.inflate(R.layout.category_work, null, false)
+            }
+            2 -> layout =
+                layoutInflater.inflate(R.layout.category_meeting, null, false)
+            3 -> layout =
+                layoutInflater.inflate(R.layout.category_shopping, null, false)
+            4 -> layout =
+                layoutInflater.inflate(R.layout.category_study, null, false)
+        }
+    }
+
+    private fun setPersonalCard() {
+        layout =
+            layoutInflater.inflate(R.layout.category_personal, null, false)
         setCardViewClickListener()
         binding.gLCategory.addView(layout)
     }
 
-    private fun setLayout(which: Int? = -1, restore: Boolean = false) {
-        if (!restore) {
-            when (which) {
-                0 -> {
-                    layout =
-                        layoutInflater.inflate(R.layout.category_personal, null, false)
-                }
-                1 -> {
-                    layout =
-                        layoutInflater.inflate(R.layout.category_work, null, false)
-                }
-                2 -> layout =
-                    layoutInflater.inflate(R.layout.category_meeting, null, false)
-                3 -> layout =
-                    layoutInflater.inflate(R.layout.category_shopping, null, false)
-                4 -> layout =
-                    layoutInflater.inflate(R.layout.category_study, null, false)
-            }
-        } else {
-            if (saveCategory[PERSONAL]!!) {
-                layout =
-                    layoutInflater.inflate(R.layout.category_personal, null, false)
-            }
+    private fun setMeetingCard() {
+        layout =
+            layoutInflater.inflate(R.layout.category_meeting, null, false)
+        setCardViewClickListener()
+        binding.gLCategory.addView(layout)
+    }
 
-            if (saveCategory[MEETING]!!) {
-                layout =
-                    layoutInflater.inflate(R.layout.category_meeting, null, false)
-            }
+    private fun setShoppingCard() {
+        layout =
+            layoutInflater.inflate(R.layout.category_shopping, null, false)
+        setCardViewClickListener()
+        binding.gLCategory.addView(layout)
+    }
 
-            if (saveCategory[SHOPPING]!!) {
-                layout =
-                    layoutInflater.inflate(R.layout.category_shopping, null, false)
-            }
+    private fun setStudyCard() {
+        layout =
+            layoutInflater.inflate(R.layout.category_study, null, false)
+        setCardViewClickListener()
+        binding.gLCategory.addView(layout)
+    }
 
-            if (saveCategory[STUDY]!!) {
-                layout =
-                    layoutInflater.inflate(R.layout.category_study, null, false)
-            }
-
-            if (saveCategory[WORK]!!) {
-                layout =
-                    layoutInflater.inflate(R.layout.category_work, null, false)
-            }
-        }
+    private fun setWorkCard() {
+        layout =
+            layoutInflater.inflate(R.layout.category_work, null, false)
+        setCardViewClickListener()
+        binding.gLCategory.addView(layout)
     }
 
     private fun setCardViewClickListener() {
         val text = layout.findViewById<TextView>(R.id.tvCategory).text
 
         layout.findViewById<CardView>(R.id.cardView).setOnClickListener {
-            Log.d(TAG, "addView: $layout")
             Toast.makeText(
                 context,
                 text,
@@ -161,37 +161,42 @@ class CategoryFragment : Fragment(R.layout.fragment_category) {
         dataStoreViewModel.personal.observe(this, {
             saveCategory[PERSONAL] = it
             if (it)
-                restoreCards()
+                setPersonalCard()
         })
 
         dataStoreViewModel.meeting.observe(this, {
             saveCategory[MEETING] = it
             if (it)
-                restoreCards()
+                setMeetingCard()
         })
 
         dataStoreViewModel.shopping.observe(this, {
             saveCategory[SHOPPING] = it
             if (it)
-                restoreCards()
+                setShoppingCard()
         })
 
         dataStoreViewModel.study.observe(this, {
             saveCategory[STUDY] = it
             if (it)
-                restoreCards()
+                setStudyCard()
         })
 
         dataStoreViewModel.work.observe(this, {
             saveCategory[WORK] = it
             if (it)
-                restoreCards()
+                setWorkCard()
         })
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         dataStoreViewModel = ViewModelProvider(this).get(DataStoreViewModel::class.java)
+    }
+
+    override fun onStart() {
+        super.onStart()
+        Log.d(TAG, "onStart: $saveCategory")
         observeDataStore()
     }
 
