@@ -6,7 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.kagan.to_dolist.repositories.CategoryRepository
 
-class DataStoreViewModel : ViewModel() {
+class CategoryViewModel : ViewModel() {
 
     private val TAG = "ViewModel"
     private var repository: CategoryRepository = CategoryRepository.getInstance()

@@ -9,7 +9,6 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.kagan.to_dolist.R
@@ -19,7 +18,7 @@ import com.kagan.to_dolist.constants.Constant.SHOPPING
 import com.kagan.to_dolist.constants.Constant.STUDY
 import com.kagan.to_dolist.constants.Constant.WORK
 import com.kagan.to_dolist.databinding.FragmentCategoryBinding
-import com.kagan.to_dolist.viewModels.DataStoreViewModel
+import com.kagan.to_dolist.viewModels.CategoryViewModel
 import io.sentry.Sentry
 
 class CategoryFragment : Fragment(R.layout.fragment_category) {
@@ -27,7 +26,7 @@ class CategoryFragment : Fragment(R.layout.fragment_category) {
     private val TAG = "CategoryFragment"
     private lateinit var binding: FragmentCategoryBinding
     private lateinit var layout: View
-    private lateinit var dataStoreViewModel: DataStoreViewModel
+    private lateinit var dataStoreViewModel: CategoryViewModel
     private lateinit var saveCategory: Map<String, Boolean>
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -166,7 +165,7 @@ class CategoryFragment : Fragment(R.layout.fragment_category) {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         dataStoreViewModel =
-            ViewModelProvider(this).get(DataStoreViewModel::class.java)
+            ViewModelProvider(this).get(CategoryViewModel::class.java)
 
         saveCategory = dataStoreViewModel.getCategory().value!!
 
