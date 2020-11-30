@@ -5,6 +5,7 @@ import android.content.DialogInterface
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.GridLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.cardview.widget.CardView
@@ -26,7 +27,7 @@ class CategoryFragment : Fragment(R.layout.fragment_category) {
     private val TAG = "CategoryFragment"
     private lateinit var binding: FragmentCategoryBinding
     private lateinit var layout: View
-    private lateinit var dataStoreViewModel: CategoryViewModel
+    private lateinit var categoryViewModel: CategoryViewModel
     private lateinit var saveCategory: Map<String, Boolean>
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -37,15 +38,16 @@ class CategoryFragment : Fragment(R.layout.fragment_category) {
             addView()
         }
 
-        dataStoreViewModel.getCategory().observe(viewLifecycleOwner, {
+        categoryViewModel.getCategory().observe(viewLifecycleOwner, {
             saveCategory = it
-            Log.d(TAG, "value: $it ")
+            Log.d(TAG, "Observe: $it ")
         })
     }
 
     private fun addView() {
 
         var categoryArray = ""
+        var whichCategory = -1
 
         val alertDialog = AlertDialog.Builder(context)
             .setTitle(getString(R.string.add_category))
@@ -57,8 +59,7 @@ class CategoryFragment : Fragment(R.layout.fragment_category) {
                     categoryArray = resources.getStringArray(R.array.categories)[which]
 
                     if (saveCategory[categoryArray] != true) {
-                        setLayout(which)
-                        setCardViewClickListener()
+                        whichCategory = which
                     } else {
                         Toast.makeText(
                             context,
@@ -73,10 +74,11 @@ class CategoryFragment : Fragment(R.layout.fragment_category) {
                 DialogInterface.OnClickListener { _, _ ->
                     if (this::layout.isInitialized) {
                         try {
-                            binding.gLCategory.addView(layout)
+//                            binding.gLCategory.addView(layout)
                             val categoriesMap = saveCategory.toMutableMap()
                             categoriesMap[categoryArray] = true
-                            dataStoreViewModel.saved(categoriesMap)
+                            categoryViewModel.saved(categoriesMap)
+                            setLayout(whichCategory)
                         } catch (e: Exception) {
                             Sentry.captureMessage(e.message.toString())
                         }
@@ -89,21 +91,18 @@ class CategoryFragment : Fragment(R.layout.fragment_category) {
 
     private fun setLayout(which: Int? = -1) {
         when (which) {
-            0 -> layout =
-                layoutInflater.inflate(R.layout.category_personal, null, false)
-            1 -> layout =
-                layoutInflater.inflate(R.layout.category_meeting, null, false)
-            2 -> layout =
-                layoutInflater.inflate(R.layout.category_shopping, null, false)
-            3 -> layout =
-                layoutInflater.inflate(R.layout.category_study, null, false)
-            4 -> layout =
-                layoutInflater.inflate(R.layout.category_work, null, false)
+            0 -> setPersonalCard()
+            1 -> setMeetingCard()
+            2 -> setShoppingCard()
+            3 -> setStudyCard()
+            4 -> setWorkCard()
         }
     }
 
     private fun setPersonalCard() {
         if (saveCategory[PERSONAL] == true) {
+            setIsEmpty()
+
             layout =
                 layoutInflater.inflate(R.layout.category_personal, null, false)
             setCardViewClickListener()
@@ -113,6 +112,8 @@ class CategoryFragment : Fragment(R.layout.fragment_category) {
 
     private fun setMeetingCard() {
         if (saveCategory[MEETING] == true) {
+            setIsEmpty()
+
             layout =
                 layoutInflater.inflate(R.layout.category_meeting, null, false)
             setCardViewClickListener()
@@ -122,6 +123,8 @@ class CategoryFragment : Fragment(R.layout.fragment_category) {
 
     private fun setShoppingCard() {
         if (saveCategory[SHOPPING] == true) {
+            setIsEmpty()
+
             layout =
                 layoutInflater.inflate(R.layout.category_shopping, null, false)
             setCardViewClickListener()
@@ -131,6 +134,8 @@ class CategoryFragment : Fragment(R.layout.fragment_category) {
 
     private fun setStudyCard() {
         if (saveCategory[STUDY] == true) {
+            setIsEmpty()
+
             layout =
                 layoutInflater.inflate(R.layout.category_study, null, false)
             setCardViewClickListener()
@@ -140,11 +145,19 @@ class CategoryFragment : Fragment(R.layout.fragment_category) {
 
     private fun setWorkCard() {
         if (saveCategory[WORK] == true) {
+            setIsEmpty()
+
             layout =
                 layoutInflater.inflate(R.layout.category_work, null, false)
             setCardViewClickListener()
             binding.gLCategory.addView(layout)
         }
+    }
+
+    private fun setEmptyCard() {
+        layout =
+            layoutInflater.inflate(R.layout.category_empty, GridLayout(context), false)
+        binding.gLCategory.addView(layout)
     }
 
     private fun setCardViewClickListener() {
@@ -162,25 +175,38 @@ class CategoryFragment : Fragment(R.layout.fragment_category) {
         }
     }
 
+    private fun setIsEmpty() {
+        if (categoryViewModel.isEmpty) {
+            categoryViewModel.isEmpty = false
+            binding.gLCategory.removeAllViews()
+        }
+
+        Log.d(TAG, "setIsEmpty: ${categoryViewModel.isEmpty}")
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        dataStoreViewModel =
+        categoryViewModel =
             ViewModelProvider(this).get(CategoryViewModel::class.java)
 
-        saveCategory = dataStoreViewModel.getCategory().value!!
+        saveCategory = categoryViewModel.getCategory().value!!
 
-        Log.d(TAG, "onCreate: ${dataStoreViewModel.getCategory().value}")
     }
 
     override fun onStart() {
         super.onStart()
-        Log.d(TAG, "onStart: ${dataStoreViewModel.getCategory().value}")
 
-        setPersonalCard()
-        setMeetingCard()
-        setShoppingCard()
-        setStudyCard()
-        setWorkCard()
+        Log.d(TAG, "onStart: isEmpty:${categoryViewModel.isEmpty}")
+
+        if (categoryViewModel.isEmpty) {
+            setEmptyCard()
+        } else {
+            setPersonalCard()
+            setMeetingCard()
+            setShoppingCard()
+            setStudyCard()
+            setWorkCard()
+        }
     }
 
     override fun onStop() {
