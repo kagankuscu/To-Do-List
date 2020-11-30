@@ -23,14 +23,6 @@ class CategoryViewModel : ViewModel() {
         setEmpty()
     }
 
-    fun setCategory(category: String) {
-        val oldCategory = categories.value?.toMutableMap()
-        oldCategory?.set(category, true)
-
-        categories.value = oldCategory
-
-        Log.d(TAG, "setCategory: ${categories.value}")
-    }
 
     fun getCategory(): LiveData<Map<String, Boolean>> {
         return categories
@@ -45,7 +37,7 @@ class CategoryViewModel : ViewModel() {
     private fun setEmpty() {
         categories.value?.forEach { _, value ->
             if (value) {
-                isEmpty = value
+                isEmpty = false
                 return@forEach
             }
         }
