@@ -62,9 +62,5 @@ class TaskFragment : Fragment(R.layout.fragment_task) {
         adapter = TaskAdapter(taskViewModel.taskByCategory.value!!)
 
         Log.d(TAG, "onCreate: ${taskViewModel.taskByCategory.value?.size}")
-
-        taskViewModel.taskByCategory.value?.forEach {
-            Log.d(TAG, "onCreate: $it")
-        }
     }
 }

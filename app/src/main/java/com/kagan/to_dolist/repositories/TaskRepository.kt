@@ -122,7 +122,7 @@ class TaskRepository {
                         1,
                         "Fragment empty",
                         Category.PERSONAL,
-                        System.currentTimeMillis(),
+                        System.currentTimeMillis() + 15_000,
                         false
                     )
                 )
@@ -132,7 +132,7 @@ class TaskRepository {
                         3,
                         "Tomorrow will add database",
                         Category.PERSONAL,
-                        System.currentTimeMillis(),
+                        System.currentTimeMillis() + 34_000_000,
                         false
                     )
                 )
@@ -142,7 +142,7 @@ class TaskRepository {
                         5,
                         "Watch Movie",
                         Category.PERSONAL,
-                        System.currentTimeMillis(),
+                        System.currentTimeMillis() + 1,
                         false
                     )
                 )
@@ -152,7 +152,7 @@ class TaskRepository {
                         6,
                         "take a photography",
                         Category.PERSONAL,
-                        System.currentTimeMillis(),
+                        System.currentTimeMillis() + 5_000,
                         false
                     )
                 )
@@ -162,13 +162,41 @@ class TaskRepository {
                         8,
                         "ride a bike",
                         Category.PERSONAL,
-                        System.currentTimeMillis(),
+                        System.currentTimeMillis() + 60_000,
                         false
                     )
                 )
             }
             Category.MEETING -> {
+                taskList.add(
+                    Task(
+                        10,
+                        "Meet old friends ",
+                        Category.MEETING,
+                        System.currentTimeMillis() + 10_000,
+                        false
+                    )
+                )
 
+                taskList.add(
+                    Task(
+                        11,
+                        "Important meeting",
+                        Category.MEETING,
+                        System.currentTimeMillis() + 2000,
+                        false
+                    )
+                )
+
+                taskList.add(
+                    Task(
+                        12,
+                        "12:00 meeting",
+                        Category.MEETING,
+                        System.currentTimeMillis() + 10,
+                        false
+                    )
+                )
             }
 
             Category.SHOPPING -> {
@@ -177,7 +205,7 @@ class TaskRepository {
                         7,
                         "Buy lamp",
                         Category.SHOPPING,
-                        System.currentTimeMillis(),
+                        System.currentTimeMillis() + 50_000,
                         false
                     )
                 )
@@ -189,7 +217,16 @@ class TaskRepository {
                         4,
                         "Study PDIR",
                         Category.STUDY,
-                        System.currentTimeMillis(),
+                        System.currentTimeMillis() + 12_211,
+                        false
+                    )
+                )
+                taskList.add(
+                    Task(
+                        9,
+                        "Study ERDSC",
+                        Category.STUDY,
+                        System.currentTimeMillis() + 11,
                         false
                     )
                 )
@@ -201,7 +238,7 @@ class TaskRepository {
                         2,
                         "Some work to do",
                         Category.WORK,
-                        System.currentTimeMillis(),
+                        System.currentTimeMillis() + 10_210,
                         false
                     )
                 )
