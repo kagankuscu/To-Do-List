@@ -29,7 +29,7 @@ class CategoryRepository {
 
 
     fun getCategory(): MutableLiveData<Map<String, Boolean>> {
-        val personal = true
+        val personal = false
         val meeting = false
         val shopping = false
         val study = false

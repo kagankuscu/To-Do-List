@@ -13,18 +13,20 @@
         android:src="@drawable/list" />
 
     <TextView
+        android:id="@+id/mainText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginTop="16dp"
-        android:text="No Category"
+        android:text="@string/main_text"
         android:textSize="32sp" />
 
     <TextView
+        android:id="@+id/subText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:text="You have no category."
+        android:text="@string/sub_text"
         android:textSize="20sp" />
 
 </LinearLayout>

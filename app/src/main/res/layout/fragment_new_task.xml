@@ -30,7 +30,7 @@
         android:layout_marginEnd="16dp"
         android:autofillHints=""
         android:background="@drawable/new_task_edit_text_background"
-        android:hint="@string/task"
+        android:hint="@string/Task"
         android:inputType="text"
         android:paddingStart="12dp"
         android:paddingEnd="12dp"

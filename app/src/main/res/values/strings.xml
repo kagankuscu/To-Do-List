@@ -23,10 +23,14 @@
     <string name="tasks">Tasks</string>
     <string name="check">check</string>
     <string name="time">Time</string>
-    <string name="task">Task</string>
+    <string name="Task">Task</string>
     <string name="new_task">Add New Task</string>
     <string name="choose_date">Choose date</string>
     <string name="add_task">Add Task</string>
     <string name="date">Date</string>
     <string name="list">list</string>
+    <string name="main_text">No %s</string>
+    <string name="sub_text">You have no %s.</string>
+    <string name="category">category</string>
+    <string name="task">task</string>
 </resources>
