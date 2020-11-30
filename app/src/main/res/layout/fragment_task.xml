@@ -68,17 +68,13 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <GridLayout
-                android:id="@+id/gLTask"
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerViewTask"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:columnCount="1"
-                android:orientation="horizontal"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
-
-            </GridLayout>
+                app:layout_constraintTop_toTopOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
