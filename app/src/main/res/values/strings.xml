@@ -28,4 +28,5 @@
     <string name="choose_date">Choose date</string>
     <string name="add_task">Add Task</string>
     <string name="date">Date</string>
+    <string name="list">list</string>
 </resources>
