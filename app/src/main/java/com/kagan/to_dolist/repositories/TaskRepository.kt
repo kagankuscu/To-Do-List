@@ -7,7 +7,7 @@ import com.kagan.to_dolist.models.Task
 
 class TaskRepository {
 
-    private val TAG = "TaskViewModel"
+    private val TAG = "TaskRepo"
     private var allTask = MutableLiveData<ArrayList<Task>>()
     private var taskByCategory = MutableLiveData<ArrayList<Task>>()
 
@@ -251,7 +251,7 @@ class TaskRepository {
         return taskByCategory
     }
 
-    suspend fun save() {
+    suspend fun save(task: Task) {
 
     }
 }

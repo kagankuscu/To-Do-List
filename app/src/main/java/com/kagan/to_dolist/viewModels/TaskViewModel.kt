@@ -11,6 +11,7 @@ import kotlinx.coroutines.launch
 
 class TaskViewModel : ViewModel() {
 
+    private val TAG = "TaskViewModel"
     private val repository = TaskRepository.getInstance()
     lateinit var allTask: LiveData<ArrayList<Task>>
     lateinit var taskByCategory: LiveData<ArrayList<Task>>
@@ -23,9 +24,9 @@ class TaskViewModel : ViewModel() {
         taskByCategory = repository.getAllTaskByCategory(category)
     }
 
-    fun saveTask() {
+    fun saveTask(task: Task) {
         viewModelScope.launch(IO) {
-            repository.save()
+            repository.save(task)
         }
     }
 }

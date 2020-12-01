@@ -6,6 +6,6 @@ data class Task(
     val id: Long,
     val title: String,
     val category: Category,
-    val dueDateTime: Long,
-    val isDeleted: Boolean
+    val dueDateTime: Long = 0,
+    val isDeleted: Boolean = false
 )
