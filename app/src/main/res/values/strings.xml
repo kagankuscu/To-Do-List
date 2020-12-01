@@ -33,4 +33,5 @@
     <string name="sub_text">You have no %s.</string>
     <string name="category">category</string>
     <string name="task">task</string>
+    <string name="image">image</string>
 </resources>
