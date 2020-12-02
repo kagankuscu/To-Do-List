@@ -12,10 +12,10 @@
         android:theme="@style/Theme.MaterialComponents.Light">
 
         <ImageView
+            android:id="@+id/ivCategoryColor"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:contentDescription="@string/shoppingImage"
-            android:src="@drawable/task_shopping" />
+            android:contentDescription="@string/image" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -37,7 +37,6 @@
                 android:id="@+id/tvTime"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="08:59 pm"
                 app:layout_constraintBottom_toBottomOf="@id/ivCheck"
                 app:layout_constraintEnd_toEndOf="@id/guideLineTaskText"
                 app:layout_constraintStart_toEndOf="@id/ivCheck"

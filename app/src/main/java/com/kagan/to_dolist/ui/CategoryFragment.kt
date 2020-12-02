@@ -156,7 +156,14 @@ class CategoryFragment : Fragment(R.layout.fragment_category) {
 
     private fun setEmptyCard() {
         layout =
-            layoutInflater.inflate(R.layout.category_empty, GridLayout(context), false)
+            layoutInflater.inflate(R.layout.empty_layout, GridLayout(context), false)
+
+        val mainText = layout.findViewById<TextView>(R.id.mainText)
+        val subText = layout.findViewById<TextView>(R.id.subText)
+
+        mainText.text = getString(R.string.main_text, getString(R.string.category))
+        subText.text = getString(R.string.sub_text, getString(R.string.category))
+
         binding.gLCategory.addView(layout)
     }
 
