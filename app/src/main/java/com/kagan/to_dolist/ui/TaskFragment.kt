@@ -17,6 +17,7 @@ import com.kagan.to_dolist.constants.Constant.STUDY
 import com.kagan.to_dolist.constants.Constant.WORK
 import com.kagan.to_dolist.databinding.FragmentTaskBinding
 import com.kagan.to_dolist.enums.Category
+import com.kagan.to_dolist.models.Task
 import com.kagan.to_dolist.viewModels.TaskViewModel
 
 class TaskFragment : Fragment(R.layout.fragment_task) {
@@ -32,9 +33,13 @@ class TaskFragment : Fragment(R.layout.fragment_task) {
         binding = FragmentTaskBinding.bind(view)
 
         binding.tvName.text = safeargs.category
-        binding.recyclerViewTask.layoutManager = LinearLayoutManager(context)
-        binding.recyclerViewTask.adapter = adapter
+//        binding.recyclerViewTask.layoutManager = LinearLayoutManager(context)
+        binding.taskRecyclerView.recyclerView.adapter = adapter
 
+        adapter.notifyDataSetChanged()
+        if (adapter.itemCount == 0) {
+            binding.taskRecyclerView.showEmptyView()
+        }
         binding.btnAdd.setOnClickListener {
             navigateToAddTask()
         }
@@ -59,7 +64,20 @@ class TaskFragment : Fragment(R.layout.fragment_task) {
         super.onCreate(savedInstanceState)
         taskViewModel = ViewModelProvider(this).get(TaskViewModel::class.java)
         taskViewModel.getTasksByCategory(getCategoryName())
-        adapter = TaskAdapter(taskViewModel.taskByCategory.value!!)
+        val tasks = ArrayList<Task>()
+
+        taskViewModel.taskByCategory.value?.forEach {
+            Log.d(TAG, "onCreate: $it")
+        }
+        taskViewModel.taskByCategory.value.let {
+            it?.let { it1 -> tasks.addAll(it1) }
+        }
+
+        tasks.forEach {
+            Log.d(TAG, "onCreate: task:$it")
+        }
+        
+        adapter = TaskAdapter(tasks)
 
         Log.d(TAG, "onCreate: ${taskViewModel.taskByCategory.value?.size}")
     }

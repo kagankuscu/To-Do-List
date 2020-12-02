@@ -15,6 +15,8 @@ class TaskRecyclerView(
     attributeSet: AttributeSet? = null,
     defStyle: Int = 0
 ) : ConstraintLayout(context, attributeSet, defStyle) {
+    constructor(context: Context) : this(context, null, 0)
+    constructor(context: Context, attributeSet: AttributeSet?) : this(context, attributeSet, 0)
 
     private val binding: LceRecyclerViewBinding =
         LceRecyclerViewBinding.inflate(LayoutInflater.from(context), this)
@@ -52,10 +54,10 @@ class TaskRecyclerView(
                 recycle()
             }
         }
+    }
 
-        fun showEmptyView(msg: String? = null) {
-            mainText = msg ?: mainText
-            emptyBinding.root.visibility = View.VISIBLE
-        }
+    fun showEmptyView(msg: String? = null) {
+        mainText = msg ?: mainText
+        emptyBinding.root.visibility = View.VISIBLE
     }
 }
