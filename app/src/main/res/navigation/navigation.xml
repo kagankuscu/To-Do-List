@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/navigation"
-    app:startDestination="@id/todoListFragment">
+    app:startDestination="@id/onBoardFragment">
     <fragment
         android:id="@+id/todoListFragment"
         android:name="com.kagan.to_dolist.ui.CategoryFragment"
@@ -11,6 +11,9 @@
         <action
             android:id="@+id/action_todoListFragment_to_taskFragment"
             app:destination="@id/taskFragment" />
+        <argument
+            android:name="name"
+            app:argType="string" />
     </fragment>
     <fragment
         android:id="@+id/taskFragment"
@@ -28,4 +31,12 @@
         android:id="@+id/newTaskFragment"
         android:name="com.kagan.to_dolist.ui.NewTaskFragment"
         android:label="TodoListFragment" />
+    <fragment
+        android:id="@+id/onBoardFragment"
+        android:name="com.kagan.to_dolist.ui.OnBoardFragment"
+        android:label="OnBoardFragment" >
+        <action
+            android:id="@+id/action_onBoardFragment_to_todoListFragment"
+            app:destination="@id/todoListFragment" />
+    </fragment>
 </navigation>

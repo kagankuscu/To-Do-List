@@ -34,4 +34,6 @@
     <string name="category">category</string>
     <string name="task">task</string>
     <string name="image">image</string>
+    <string name="enter_your_name">Enter your name.</string>
+    <string name="get_started">Get Started</string>
 </resources>

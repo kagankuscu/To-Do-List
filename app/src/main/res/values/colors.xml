@@ -13,6 +13,7 @@
     <color name="dark_blue">#3867D5</color>
     <color name="dark_blue_900">#3867b5</color>
     <color name="light_blue_200">#ee81C7F5</color>
+    <color name="ocean_blue">#e0f7fa</color>
     <color name="project_text">#8B87B3</color>
     <color name="task_text">#8B87B3</color>
     <color name="task_desc_text">#554E8F</color>
