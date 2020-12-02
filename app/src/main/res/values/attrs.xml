@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="TaskRecyclerView">
+        <attr name="mainText" format="string"/>
+        <attr name="subText" format="string"/>
+    </declare-styleable>
+</resources>
