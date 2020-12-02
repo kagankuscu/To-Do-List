@@ -11,6 +11,9 @@
         <action
             android:id="@+id/action_todoListFragment_to_taskFragment"
             app:destination="@id/taskFragment" />
+        <argument
+            android:name="name"
+            app:argType="string" />
     </fragment>
     <fragment
         android:id="@+id/taskFragment"

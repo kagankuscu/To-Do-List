@@ -20,7 +20,7 @@ class OnBoardFragment : Fragment(R.layout.fragment_onboard) {
             if (isEmptyEditView()) {
                 Toast.makeText(context, "Please write your name.", Toast.LENGTH_SHORT).show()
             } else {
-                navigate()
+                navigate(binding.evName.text.toString())
             }
         }
     }
@@ -29,8 +29,8 @@ class OnBoardFragment : Fragment(R.layout.fragment_onboard) {
         return binding.evName.text?.isEmpty()!!
     }
 
-    private fun navigate() {
-        val action = OnBoardFragmentDirections.actionOnBoardFragmentToTodoListFragment()
+    private fun navigate(name: String) {
+        val action = OnBoardFragmentDirections.actionOnBoardFragmentToTodoListFragment(name)
         findNavController().navigate(action)
     }
 }

@@ -11,7 +11,9 @@ import android.widget.Toast
 import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.NavArgs
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import com.kagan.to_dolist.R
 import com.kagan.to_dolist.constants.Constant.MEETING
 import com.kagan.to_dolist.constants.Constant.PERSONAL
@@ -29,10 +31,13 @@ class CategoryFragment : Fragment(R.layout.fragment_category) {
     private lateinit var layout: View
     private lateinit var categoryViewModel: CategoryViewModel
     private lateinit var saveCategory: Map<String, Boolean>
+    private val args: CategoryFragmentArgs by navArgs()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentCategoryBinding.bind(view)
+
+        binding.tvName.text = args.name
 
         binding.btnAdd.setOnClickListener {
             addView()
