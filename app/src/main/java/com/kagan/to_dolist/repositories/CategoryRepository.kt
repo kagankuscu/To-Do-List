@@ -16,20 +16,6 @@ class CategoryRepository(private val db: CategoryDB, private val categoryDao: Ca
     private val category = MutableLiveData<Map<String, Boolean>>()
     private val categoryMap = mutableMapOf<String, Boolean>()
 
-    companion object {
-        private var INSTANCE: CategoryRepository? = null
-
-        fun getInstance(): CategoryRepository {
-            var instance = INSTANCE
-
-            if (instance == null) {
-                instance = CategoryRepository()
-            }
-            return instance
-        }
-    }
-
-
     fun getCategory(): MutableLiveData<Map<String, Boolean>> {
         val personal = true
         val meeting = false
@@ -44,7 +30,6 @@ class CategoryRepository(private val db: CategoryDB, private val categoryDao: Ca
         categoryMap[WORK] = work
 
         category.value = categoryMap
-
 
         return category
     }
