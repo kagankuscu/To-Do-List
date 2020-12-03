@@ -35,5 +35,6 @@
     <dimen name="task_cv_padding">12dp</dimen>
     <dimen name="task_time_margin_start">12dp</dimen>
     <dimen name="guideline_task_text">120dp</dimen>
+    <dimen name="choose_date_padding">4dp</dimen>
 
 </resources>
