@@ -1,4 +1,4 @@
 package com.kagan.to_dolist.dao
 
-interface CategoryDAO {
+class CategoryDAO {
 }

@@ -9,7 +9,7 @@ import com.kagan.to_dolist.constants.Constant.WORK
 import com.kagan.to_dolist.dao.CategoryDAO
 import com.kagan.to_dolist.db.CategoryDB
 
-class CategoryRepository(private val db: CategoryDB, private val categoryDao: CategoryDAO) {
+class CategoryRepository(private val db: CategoryDB) {
 
     private val TAG = "FakeRepo"
 
