@@ -60,4 +60,8 @@ class TaskRecyclerView(
         mainText = msg ?: mainText
         emptyBinding.root.visibility = View.VISIBLE
     }
+
+    fun hideEmptyView() {
+        emptyBinding.root.visibility = View.GONE
+    }
 }

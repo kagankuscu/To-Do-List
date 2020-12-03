@@ -38,5 +38,8 @@
     <dimen name="task_radio_cv_margin_start">16dp</dimen>
     <dimen name="task_time_margin_start">12dp</dimen>
     <dimen name="guideline_task_text">120dp</dimen>
+    <dimen name="choose_date_padding">4dp</dimen>
+    <dimen name="choose_date_text_margin_start">8dp</dimen>
+    <dimen name="down_arrow_margin_start">56dp</dimen>
 
 </resources>

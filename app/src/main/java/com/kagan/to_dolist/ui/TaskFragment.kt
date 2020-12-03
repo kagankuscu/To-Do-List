@@ -19,6 +19,7 @@ import com.kagan.to_dolist.db.TaskDB
 import com.kagan.to_dolist.enums.Category
 import com.kagan.to_dolist.models.Task
 import com.kagan.to_dolist.repositories.TaskRepository
+import com.kagan.to_dolist.viewModels.ShareViewModel
 import com.kagan.to_dolist.viewModels.TaskViewModel
 import com.kagan.to_dolist.viewModels.viewModelFactory.TaskViewModelFactory
 
@@ -29,25 +30,45 @@ class TaskFragment : Fragment(R.layout.fragment_task) {
     private val safeargs: TaskFragmentArgs by navArgs()
     private lateinit var db: TaskDB
     private lateinit var repository: TaskRepository
+    private lateinit var shareViewModel: ShareViewModel
     private lateinit var taskViewModel: TaskViewModel
     private lateinit var taskViewModelFactory: TaskViewModelFactory
     private lateinit var adapter: TaskAdapter
+    private val mTasks = ArrayList<Task>()
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentTaskBinding.bind(view)
 
         binding.tvName.text = safeargs.category
-//        binding.recyclerViewTask.layoutManager = LinearLayoutManager(context)
         binding.taskRecyclerView.recyclerView.adapter = adapter
 
-        adapter.notifyDataSetChanged()
         if (adapter.itemCount == 0) {
             binding.taskRecyclerView.showEmptyView()
+            Log.d(TAG, "onViewCreated: ")
         }
         binding.btnAdd.setOnClickListener {
             navigateToAddTask()
         }
+
+        observeSharedViewModel()
+        observeTasksByCategory()
+    }
+
+    private fun observeTasksByCategory(): Unit {
+        taskViewModel.getTasksByCategory(getCategoryName()).observe(viewLifecycleOwner, {
+            mTasks.clear()
+            mTasks.addAll(it)
+            adapter.notifyItemInserted(mTasks.size - 1)
+            binding.taskRecyclerView.hideEmptyView()
+        })
+    }
+
+    private fun observeSharedViewModel() {
+        shareViewModel.task.observe(viewLifecycleOwner, {
+            taskViewModel.saveTask(it)
+        })
     }
 
     private fun navigateToAddTask() {
@@ -71,14 +92,10 @@ class TaskFragment : Fragment(R.layout.fragment_task) {
         repository = TaskRepository(db)
         taskViewModelFactory = TaskViewModelFactory(repository)
         taskViewModel = ViewModelProvider(this, taskViewModelFactory).get(TaskViewModel::class.java)
+        shareViewModel = ViewModelProvider(requireActivity()).get(ShareViewModel::class.java)
 
         taskViewModel.getTasksByCategory(getCategoryName())
-        val tasks = ArrayList<Task>()
-        adapter = TaskAdapter(tasks)
-        taskViewModel.getTasksByCategory(getCategoryName()).observe(this, {
-            adapter = TaskAdapter(it)
-            adapter.notifyItemInserted(it.size - 1)
-        })
+        adapter = TaskAdapter(mTasks)
 
         Log.d(TAG, "onCreate: ${taskViewModel.getTasksByCategory(getCategoryName()).value?.size}")
     }
