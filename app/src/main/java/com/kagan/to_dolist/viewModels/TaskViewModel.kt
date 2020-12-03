@@ -12,15 +12,13 @@ import kotlinx.coroutines.launch
 class TaskViewModel(private val repository: TaskRepository) : ViewModel() {
 
     private val TAG = "TaskViewModel"
-    lateinit var allTask: LiveData<ArrayList<Task>>
-    lateinit var taskByCategory: LiveData<ArrayList<Task>>
 
-    fun getAllTasks() {
-        allTask = repository.getAllTask()
+    fun getAllTasks(): LiveData<ArrayList<Task>> {
+        return repository.getAllTask()
     }
 
-    fun getTasksByCategory(category: Category) {
-        taskByCategory = repository.getAllTaskByCategory(category)
+    fun getTasksByCategory(category: Category): LiveData<ArrayList<Task>> {
+        return repository.getAllTaskByCategory(category)
     }
 
     fun saveTask(task: Task) {
