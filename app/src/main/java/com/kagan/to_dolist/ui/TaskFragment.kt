@@ -34,6 +34,8 @@ class TaskFragment : Fragment(R.layout.fragment_task) {
     private lateinit var taskViewModel: TaskViewModel
     private lateinit var taskViewModelFactory: TaskViewModelFactory
     private lateinit var adapter: TaskAdapter
+    private val mTasks = ArrayList<Task>()
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -42,9 +44,9 @@ class TaskFragment : Fragment(R.layout.fragment_task) {
         binding.tvName.text = safeargs.category
         binding.taskRecyclerView.recyclerView.adapter = adapter
 
-        adapter.notifyDataSetChanged()
         if (adapter.itemCount == 0) {
             binding.taskRecyclerView.showEmptyView()
+            Log.d(TAG, "onViewCreated: ")
         }
         binding.btnAdd.setOnClickListener {
             navigateToAddTask()
@@ -56,9 +58,10 @@ class TaskFragment : Fragment(R.layout.fragment_task) {
 
     private fun observeTasksByCategory(): Unit {
         taskViewModel.getTasksByCategory(getCategoryName()).observe(viewLifecycleOwner, {
-            adapter = TaskAdapter(it)
-            adapter.notifyItemInserted(it.size - 1)
-            Log.d(TAG, "observeTasksByCategory: $it")
+            mTasks.clear()
+            mTasks.addAll(it)
+            adapter.notifyItemInserted(mTasks.size - 1)
+            binding.taskRecyclerView.hideEmptyView()
         })
     }
 
@@ -92,8 +95,7 @@ class TaskFragment : Fragment(R.layout.fragment_task) {
         shareViewModel = ViewModelProvider(requireActivity()).get(ShareViewModel::class.java)
 
         taskViewModel.getTasksByCategory(getCategoryName())
-        val tasks = ArrayList<Task>()
-        adapter = TaskAdapter(tasks)
+        adapter = TaskAdapter(mTasks)
 
         Log.d(TAG, "onCreate: ${taskViewModel.getTasksByCategory(getCategoryName()).value?.size}")
     }
