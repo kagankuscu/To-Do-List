@@ -7,7 +7,6 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.kagan.to_dolist.R
 import com.kagan.to_dolist.adapters.TaskAdapter
 import com.kagan.to_dolist.constants.Constant.MEETING
@@ -16,16 +15,22 @@ import com.kagan.to_dolist.constants.Constant.SHOPPING
 import com.kagan.to_dolist.constants.Constant.STUDY
 import com.kagan.to_dolist.constants.Constant.WORK
 import com.kagan.to_dolist.databinding.FragmentTaskBinding
+import com.kagan.to_dolist.db.TaskDB
 import com.kagan.to_dolist.enums.Category
 import com.kagan.to_dolist.models.Task
+import com.kagan.to_dolist.repositories.TaskRepository
 import com.kagan.to_dolist.viewModels.TaskViewModel
+import com.kagan.to_dolist.viewModels.viewModelFactory.TaskViewModelFactory
 
 class TaskFragment : Fragment(R.layout.fragment_task) {
 
     val TAG = "TaskFragment"
     private lateinit var binding: FragmentTaskBinding
     private val safeargs: TaskFragmentArgs by navArgs()
+    private lateinit var db: TaskDB
+    private lateinit var repository: TaskRepository
     private lateinit var taskViewModel: TaskViewModel
+    private lateinit var taskViewModelFactory: TaskViewModelFactory
     private lateinit var adapter: TaskAdapter
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -62,23 +67,19 @@ class TaskFragment : Fragment(R.layout.fragment_task) {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        taskViewModel = ViewModelProvider(this).get(TaskViewModel::class.java)
+        db = TaskDB()
+        repository = TaskRepository(db)
+        taskViewModelFactory = TaskViewModelFactory(repository)
+        taskViewModel = ViewModelProvider(this, taskViewModelFactory).get(TaskViewModel::class.java)
+
         taskViewModel.getTasksByCategory(getCategoryName())
         val tasks = ArrayList<Task>()
-
-        taskViewModel.taskByCategory.value?.forEach {
-            Log.d(TAG, "onCreate: $it")
-        }
-        taskViewModel.taskByCategory.value.let {
-            it?.let { it1 -> tasks.addAll(it1) }
-        }
-
-        tasks.forEach {
-            Log.d(TAG, "onCreate: task:$it")
-        }
-        
         adapter = TaskAdapter(tasks)
+        taskViewModel.getTasksByCategory(getCategoryName()).observe(this, {
+            adapter = TaskAdapter(it)
+            adapter.notifyItemInserted(it.size - 1)
+        })
 
-        Log.d(TAG, "onCreate: ${taskViewModel.taskByCategory.value?.size}")
+        Log.d(TAG, "onCreate: ${taskViewModel.getTasksByCategory(getCategoryName()).value?.size}")
     }
 }

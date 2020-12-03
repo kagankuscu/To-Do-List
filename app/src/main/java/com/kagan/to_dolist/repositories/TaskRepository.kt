@@ -7,19 +7,19 @@ import com.kagan.to_dolist.db.TaskDB
 import com.kagan.to_dolist.enums.Category
 import com.kagan.to_dolist.models.Task
 
-class TaskRepository(private val db: TaskDB, private val taskDao: TaskDao) {
+class TaskRepository(private val db: TaskDB) {
 
     private val TAG = "TaskRepo"
 
     fun getAllTask(): LiveData<ArrayList<Task>> {
-        return taskDao.getAllTask()
+        return db.getTaskDao().getAllTask()
     }
 
     fun getAllTaskByCategory(category: Category): LiveData<ArrayList<Task>> {
-        return taskDao.getAllTaskByCategory()
+        return db.getTaskDao().getAllTaskByCategory(category)
     }
 
     suspend fun save(task: Task) {
-        taskDao.save(task)
+        db.getTaskDao().save(task)
     }
 }
