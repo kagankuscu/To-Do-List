@@ -12,7 +12,7 @@ import com.kagan.to_dolist.models.Task
     version = 1
 )
 abstract class TaskDB : RoomDatabase() {
-    abstract fun taskDao(): TaskDao
+    abstract fun getTaskDao(): TaskDao
 
     companion object {
         @Volatile

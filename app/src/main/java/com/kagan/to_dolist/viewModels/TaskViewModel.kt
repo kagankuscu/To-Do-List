@@ -13,11 +13,11 @@ class TaskViewModel(private val repository: TaskRepository) : ViewModel() {
 
     private val TAG = "TaskViewModel"
 
-    fun getAllTasks(): LiveData<ArrayList<Task>> {
+    fun getAllTasks(): LiveData<List<Task>> {
         return repository.getAllTask()
     }
 
-    fun getTasksByCategory(category: Category): LiveData<ArrayList<Task>> {
+    fun getTasksByCategory(category: Category): LiveData<List<Task>> {
         return repository.getAllTaskByCategory(category)
     }
 

@@ -88,7 +88,7 @@ class TaskFragment : Fragment(R.layout.fragment_task) {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        db = TaskDB()
+        db = TaskDB(requireContext())
         repository = TaskRepository(db)
         taskViewModelFactory = TaskViewModelFactory(repository)
         taskViewModel = ViewModelProvider(this, taskViewModelFactory).get(TaskViewModel::class.java)

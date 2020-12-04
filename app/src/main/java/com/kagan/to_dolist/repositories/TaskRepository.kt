@@ -9,15 +9,15 @@ class TaskRepository(private val db: TaskDB) {
 
     private val TAG = "TaskRepo"
 
-    fun getAllTask(): LiveData<ArrayList<Task>> {
-        return db.taskDao.getAllTask()
+    fun getAllTask(): LiveData<List<Task>> {
+        return db.getTaskDao().getAllTasks()
     }
 
-    fun getAllTaskByCategory(category: Category): LiveData<ArrayList<Task>> {
-        return db.taskDao.getAllTaskByCategory(category)
+    fun getAllTaskByCategory(category: Category): LiveData<List<Task>> {
+        return db.getTaskDao().getAllTaskByCategory(category)
     }
 
     suspend fun save(task: Task) {
-        db.taskDao.save(task)
+        db.getTaskDao().upsert(task)
     }
 }

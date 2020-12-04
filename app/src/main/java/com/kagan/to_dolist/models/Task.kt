@@ -4,7 +4,7 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.kagan.to_dolist.enums.Category
 
-@Entity(tableName = "task")
+@Entity(tableName = "task_table")
 data class Task(
     @PrimaryKey(autoGenerate = true)
     val id: Long,
