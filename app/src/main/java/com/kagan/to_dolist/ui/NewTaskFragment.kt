@@ -47,6 +47,6 @@ class NewTaskFragment : Fragment(R.layout.fragment_new_task) {
         val dateLong = System.currentTimeMillis()
         val category = Category.PERSONAL
 
-        return Task(20, title, category, dateLong)
+        return Task(title, category, dateLong)
     }
 }
