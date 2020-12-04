@@ -60,7 +60,8 @@ class TaskFragment : Fragment(R.layout.fragment_task) {
         taskViewModel.getTasksByCategory(getCategoryName()).observe(viewLifecycleOwner, {
             mTasks.clear()
             mTasks.addAll(it)
-            adapter.notifyItemInserted(mTasks.size - 1)
+//            adapter.notifyItemInserted(mTasks.size - 1)
+            adapter.notifyDataSetChanged()
             binding.taskRecyclerView.hideEmptyView()
         })
     }
