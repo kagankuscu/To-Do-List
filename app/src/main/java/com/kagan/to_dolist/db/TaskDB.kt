@@ -1,18 +1,32 @@
 package com.kagan.to_dolist.db
 
+import android.content.Context
+import androidx.room.Database
+import androidx.room.Room
+import androidx.room.RoomDatabase
 import com.kagan.to_dolist.dao.TaskDao
+import com.kagan.to_dolist.models.Task
 
-class TaskDB {
-    var taskDao = TaskDao()
-        private set
+@Database(
+    entities = [Task::class],
+    version = 1
+)
+abstract class TaskDB : RoomDatabase() {
+    abstract fun taskDao(): TaskDao
 
     companion object {
         @Volatile
         private var instance: TaskDB? = null
+        private val LOCK = Any()
 
-        fun getInstance() =
-            instance ?: synchronized(this) {
-                instance ?: TaskDB().also { instance = it }
-            }
+        operator fun invoke(context: Context) = instance ?: synchronized(LOCK) {
+            instance ?: createDatabase(context).also { instance = it }
+        }
+
+        private fun createDatabase(context: Context) =
+            Room.databaseBuilder(
+                context.applicationContext,
+                TaskDB::class.java, "TaskDB.db"
+            ).build()
     }
 }
