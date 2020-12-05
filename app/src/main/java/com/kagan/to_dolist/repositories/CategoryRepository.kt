@@ -6,27 +6,15 @@ import com.kagan.to_dolist.constants.Constant.PERSONAL
 import com.kagan.to_dolist.constants.Constant.SHOPPING
 import com.kagan.to_dolist.constants.Constant.STUDY
 import com.kagan.to_dolist.constants.Constant.WORK
+import com.kagan.to_dolist.dao.CategoryDAO
+import com.kagan.to_dolist.db.CategoryDB
 
-class CategoryRepository {
+class CategoryRepository(private val db: CategoryDB) {
 
     private val TAG = "FakeRepo"
 
     private val category = MutableLiveData<Map<String, Boolean>>()
     private val categoryMap = mutableMapOf<String, Boolean>()
-
-    companion object {
-        private var INSTANCE: CategoryRepository? = null
-
-        fun getInstance(): CategoryRepository {
-            var instance = INSTANCE
-
-            if (instance == null) {
-                instance = CategoryRepository()
-            }
-            return instance
-        }
-    }
-
 
     fun getCategory(): MutableLiveData<Map<String, Boolean>> {
         val personal = true
@@ -42,7 +30,6 @@ class CategoryRepository {
         categoryMap[WORK] = work
 
         category.value = categoryMap
-
 
         return category
     }

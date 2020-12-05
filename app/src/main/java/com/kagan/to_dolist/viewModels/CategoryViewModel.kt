@@ -8,10 +8,9 @@ import androidx.lifecycle.map
 import com.kagan.to_dolist.constants.Constant.PERSONAL
 import com.kagan.to_dolist.repositories.CategoryRepository
 
-class CategoryViewModel : ViewModel() {
+class CategoryViewModel(private val repository: CategoryRepository) : ViewModel() {
 
     private val TAG = "ViewModel"
-    private var repository: CategoryRepository = CategoryRepository.getInstance()
     private var categories = MutableLiveData<Map<String, Boolean>>()
     var isEmpty: Boolean = true
 

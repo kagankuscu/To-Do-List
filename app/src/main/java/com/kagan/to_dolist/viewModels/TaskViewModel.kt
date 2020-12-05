@@ -9,19 +9,16 @@ import com.kagan.to_dolist.repositories.TaskRepository
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.launch
 
-class TaskViewModel : ViewModel() {
+class TaskViewModel(private val repository: TaskRepository) : ViewModel() {
 
     private val TAG = "TaskViewModel"
-    private val repository = TaskRepository.getInstance()
-    lateinit var allTask: LiveData<ArrayList<Task>>
-    lateinit var taskByCategory: LiveData<ArrayList<Task>>
 
-    fun getAllTasks() {
-        allTask = repository.getAllTask()
+    fun getAllTasks(): LiveData<List<Task>> {
+        return repository.getAllTask()
     }
 
-    fun getTasksByCategory(category: Category) {
-        taskByCategory = repository.getAllTaskByCategory(category)
+    fun getTasksByCategory(category: Category): LiveData<List<Task>> {
+        return repository.getAllTaskByCategory(category)
     }
 
     fun saveTask(task: Task) {

@@ -11,7 +11,6 @@ import android.widget.Toast
 import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.NavArgs
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.kagan.to_dolist.R
@@ -21,7 +20,10 @@ import com.kagan.to_dolist.constants.Constant.SHOPPING
 import com.kagan.to_dolist.constants.Constant.STUDY
 import com.kagan.to_dolist.constants.Constant.WORK
 import com.kagan.to_dolist.databinding.FragmentCategoryBinding
+import com.kagan.to_dolist.db.CategoryDB
+import com.kagan.to_dolist.repositories.CategoryRepository
 import com.kagan.to_dolist.viewModels.CategoryViewModel
+import com.kagan.to_dolist.viewModels.viewModelFactory.CategoryViewModelFactory
 import io.sentry.Sentry
 
 class CategoryFragment : Fragment(R.layout.fragment_category) {
@@ -29,7 +31,10 @@ class CategoryFragment : Fragment(R.layout.fragment_category) {
     private val TAG = "CategoryFragment"
     private lateinit var binding: FragmentCategoryBinding
     private lateinit var layout: View
+    private lateinit var db: CategoryDB
+    private lateinit var repository: CategoryRepository
     private lateinit var categoryViewModel: CategoryViewModel
+    private lateinit var categoryViewModelFactory: CategoryViewModelFactory
     private lateinit var saveCategory: Map<String, Boolean>
     private val args: CategoryFragmentArgs by navArgs()
 
@@ -198,8 +203,11 @@ class CategoryFragment : Fragment(R.layout.fragment_category) {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        db = CategoryDB.getInstance()
+        repository = CategoryRepository(db)
+        categoryViewModelFactory = CategoryViewModelFactory(repository)
         categoryViewModel =
-            ViewModelProvider(this).get(CategoryViewModel::class.java)
+            ViewModelProvider(this, categoryViewModelFactory).get(CategoryViewModel::class.java)
 
         saveCategory = categoryViewModel.getCategory().value!!
 
