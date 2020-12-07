@@ -14,6 +14,7 @@ import com.kagan.to_dolist.constants.Constant.PERSONAL
 import com.kagan.to_dolist.constants.Constant.SHOPPING
 import com.kagan.to_dolist.constants.Constant.STUDY
 import com.kagan.to_dolist.constants.Constant.WORK
+import com.kagan.to_dolist.constants.SimpleDateFormat
 import com.kagan.to_dolist.databinding.FragmentTaskBinding
 import com.kagan.to_dolist.db.TaskDB
 import com.kagan.to_dolist.enums.Category
@@ -43,32 +44,30 @@ class TaskFragment : Fragment(R.layout.fragment_task) {
 
         binding.tvName.text = safeargs.category
         binding.taskRecyclerView.recyclerView.adapter = adapter
-
-        if (adapter.itemCount == 0) {
-            binding.taskRecyclerView.showEmptyView()
-            Log.d(TAG, "onViewCreated: ")
-        }
         binding.btnAdd.setOnClickListener {
             navigateToAddTask()
         }
-
-        observeSharedViewModel()
-        observeTasksByCategory()
     }
 
     private fun observeTasksByCategory(): Unit {
-        taskViewModel.getTasksByCategory(getCategoryName()).observe(viewLifecycleOwner, {
+        taskViewModel.getTasksByCategory(getCategoryName()).observe(this, {
             mTasks.clear()
             mTasks.addAll(it)
-//            adapter.notifyItemInserted(mTasks.size - 1)
-            adapter.notifyDataSetChanged()
-            binding.taskRecyclerView.hideEmptyView()
+            if (it.isNotEmpty()) {
+                adapter.notifyItemInserted(mTasks.size - 1)
+                binding.taskRecyclerView.hideEmptyView()
+            } else {
+                binding.taskRecyclerView.showEmptyView()
+            }
         })
     }
 
     private fun observeSharedViewModel() {
-        shareViewModel.task.observe(viewLifecycleOwner, {
-            taskViewModel.saveTask(it)
+        shareViewModel.task.observe(this, {
+            it?.let {
+                taskViewModel.saveTask(it)
+                shareViewModel.clear()
+            }
         })
     }
 
@@ -98,6 +97,7 @@ class TaskFragment : Fragment(R.layout.fragment_task) {
         taskViewModel.getTasksByCategory(getCategoryName())
         adapter = TaskAdapter(mTasks)
 
-        Log.d(TAG, "onCreate: ${taskViewModel.getTasksByCategory(getCategoryName()).value?.size}")
+        observeSharedViewModel()
+        observeTasksByCategory()
     }
 }

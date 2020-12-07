@@ -6,6 +6,7 @@ import android.view.View
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import com.kagan.to_dolist.R
 import com.kagan.to_dolist.constants.SimpleDateFormat
 import com.kagan.to_dolist.databinding.FragmentNewTaskBinding
@@ -37,7 +38,12 @@ class NewTaskFragment : Fragment(R.layout.fragment_new_task) {
 
         binding.btnAddTask.setOnClickListener {
             shareViewModel.setTask(addTask())
+            navigateBackToTaskFragment()
         }
+    }
+
+    private fun navigateBackToTaskFragment() {
+        findNavController().navigateUp()
     }
 
     private fun addTask(): Task {

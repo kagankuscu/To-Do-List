@@ -15,4 +15,6 @@ class ShareViewModel : ViewModel() {
         Log.d(TAG, "setTask: $task")
         Log.d(TAG, "setTask: ${this.task.value}")
     }
+
+    fun clear() = null.also { task.value = it }
 }
