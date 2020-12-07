@@ -1,12 +1,11 @@
 package com.kagan.to_dolist.ui
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import com.kagan.to_dolist.R
 import com.kagan.to_dolist.constants.SimpleDateFormat
 import com.kagan.to_dolist.databinding.FragmentNewTaskBinding
@@ -19,6 +18,7 @@ class NewTaskFragment : Fragment(R.layout.fragment_new_task) {
     private val TAG = "NewTaskFragment"
     private lateinit var binding: FragmentNewTaskBinding
     private lateinit var shareViewModel: ShareViewModel
+    private val safeArgs: NewTaskFragmentArgs by navArgs()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -49,9 +49,8 @@ class NewTaskFragment : Fragment(R.layout.fragment_new_task) {
     private fun addTask(): Task {
         val title = binding.etTask.text.toString()
         val date = binding.tvChooseDateShow.text.toString()
-        val dateSplit = date.split(" ")[0]
         val dateLong = System.currentTimeMillis()
-        val category = Category.PERSONAL
+        val category = safeArgs.category
 
         return Task(title, category, dateLong)
     }

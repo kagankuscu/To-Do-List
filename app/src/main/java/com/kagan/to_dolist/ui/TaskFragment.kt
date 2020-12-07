@@ -72,7 +72,8 @@ class TaskFragment : Fragment(R.layout.fragment_task) {
     }
 
     private fun navigateToAddTask() {
-        findNavController().navigate(R.id.action_taskFragment_to_newTaskFragment)
+        val action = TaskFragmentDirections.actionTaskFragmentToNewTaskFragment(getCategoryName())
+        findNavController().navigate(action)
     }
 
     private fun getCategoryName(): Category {
