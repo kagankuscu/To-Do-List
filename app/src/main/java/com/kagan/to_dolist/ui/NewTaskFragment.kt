@@ -37,6 +37,7 @@ class NewTaskFragment : Fragment(R.layout.fragment_new_task) {
     private fun setOnclickListener() {
         binding.lChooseDate.setOnClickListener {
             binding.lChooseDate.setBackgroundResource(R.drawable.new_task_edit_text_background)
+            binding.tvTimeError.visibility = View.GONE
             binding.tvChooseDateShow.text = SimpleDateFormat.formatTime(System.currentTimeMillis())
         }
 
@@ -45,13 +46,16 @@ class NewTaskFragment : Fragment(R.layout.fragment_new_task) {
 
             if (binding.etTask.text.isEmpty()) {
                 binding.etTask.error =
-                    getString(R.string.new_task_error_message, getString(R.string.title))
+                    getString(R.string.new_task_error_message, getString(R.string.Title))
                 isEmpty = true
                 binding.etTask.setBackgroundResource(R.drawable.new_task_et_error_stroke)
             }
 
             if (binding.tvChooseDateShow.text.isEmpty()) {
                 binding.lChooseDate.setBackgroundResource(R.drawable.new_task_et_error_stroke)
+                binding.tvTimeError.visibility = View.VISIBLE
+                binding.tvTimeError.text =
+                    getString(R.string.new_task_error_message, getString(R.string.date_time))
                 isEmpty = true
             }
 

@@ -37,6 +37,6 @@
     <string name="enter_your_name">Enter your name.</string>
     <string name="get_started">Get Started</string>
     <string name="new_task_error_message">%s cannot be empty.</string>
-    <string name="title">title</string>
-    <string name="date_time">time</string>
+    <string name="Title">Title</string>
+    <string name="date_time">Time</string>
 </resources>
