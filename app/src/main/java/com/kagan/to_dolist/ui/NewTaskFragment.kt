@@ -1,6 +1,7 @@
 package com.kagan.to_dolist.ui
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -9,7 +10,6 @@ import androidx.navigation.fragment.navArgs
 import com.kagan.to_dolist.R
 import com.kagan.to_dolist.constants.SimpleDateFormat
 import com.kagan.to_dolist.databinding.FragmentNewTaskBinding
-import com.kagan.to_dolist.enums.Category
 import com.kagan.to_dolist.models.Task
 import com.kagan.to_dolist.viewModels.ShareViewModel
 
@@ -24,6 +24,9 @@ class NewTaskFragment : Fragment(R.layout.fragment_new_task) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentNewTaskBinding.bind(view)
         setOnclickListener()
+        binding.etTask.setOnClickListener {
+            binding.etTask.setBackgroundResource(R.drawable.new_task_edit_text_background)
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -33,12 +36,33 @@ class NewTaskFragment : Fragment(R.layout.fragment_new_task) {
 
     private fun setOnclickListener() {
         binding.lChooseDate.setOnClickListener {
+            binding.lChooseDate.setBackgroundResource(R.drawable.new_task_edit_text_background)
+            binding.tvTimeError.visibility = View.GONE
             binding.tvChooseDateShow.text = SimpleDateFormat.formatTime(System.currentTimeMillis())
         }
 
         binding.btnAddTask.setOnClickListener {
-            shareViewModel.setTask(addTask())
-            navigateBackToTaskFragment()
+            var isEmpty: Boolean = false
+
+            if (binding.etTask.text.isEmpty()) {
+                binding.etTask.error =
+                    getString(R.string.new_task_error_message, getString(R.string.Title))
+                isEmpty = true
+                binding.etTask.setBackgroundResource(R.drawable.new_task_et_error_stroke)
+            }
+
+            if (binding.tvChooseDateShow.text.isEmpty()) {
+                binding.lChooseDate.setBackgroundResource(R.drawable.new_task_et_error_stroke)
+                binding.tvTimeError.visibility = View.VISIBLE
+                binding.tvTimeError.text =
+                    getString(R.string.new_task_error_message, getString(R.string.date_time))
+                isEmpty = true
+            }
+
+            if (!isEmpty) {
+                shareViewModel.setTask(addTask())
+                navigateBackToTaskFragment()
+            }
         }
     }
 

@@ -41,5 +41,7 @@
     <dimen name="choose_date_padding">4dp</dimen>
     <dimen name="choose_date_text_margin_start">8dp</dimen>
     <dimen name="down_arrow_margin_start">56dp</dimen>
+    <dimen name="tv_time_error_margin_bottom">4dp</dimen>
+    <dimen name="tv_time_error_text_size">14sp</dimen>
 
 </resources>
