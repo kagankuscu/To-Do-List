@@ -1,6 +1,7 @@
 package com.kagan.to_dolist.ui
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -23,6 +24,9 @@ class NewTaskFragment : Fragment(R.layout.fragment_new_task) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentNewTaskBinding.bind(view)
         setOnclickListener()
+        binding.etTask.setOnClickListener {
+            binding.etTask.setBackgroundResource(R.drawable.new_task_edit_text_background)
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -32,6 +36,7 @@ class NewTaskFragment : Fragment(R.layout.fragment_new_task) {
 
     private fun setOnclickListener() {
         binding.lChooseDate.setOnClickListener {
+            binding.lChooseDate.setBackgroundResource(R.drawable.new_task_edit_text_background)
             binding.tvChooseDateShow.text = SimpleDateFormat.formatTime(System.currentTimeMillis())
         }
 
@@ -42,11 +47,11 @@ class NewTaskFragment : Fragment(R.layout.fragment_new_task) {
                 binding.etTask.error =
                     getString(R.string.new_task_error_message, getString(R.string.title))
                 isEmpty = true
+                binding.etTask.setBackgroundResource(R.drawable.new_task_et_error_stroke)
             }
 
             if (binding.tvChooseDateShow.text.isEmpty()) {
-                binding.etTask.error =
-                    getString(R.string.new_task_error_message, getString(R.string.date_time))
+                binding.lChooseDate.setBackgroundResource(R.drawable.new_task_et_error_stroke)
                 isEmpty = true
             }
 

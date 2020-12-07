@@ -23,4 +23,5 @@
     <color name="shopping_icon">#3867d5</color>
     <color name="study_icon">#bf0080</color>
     <color name="work_icon">#1ed102</color>
+    <color name="red">#ff0000</color>
 </resources>
