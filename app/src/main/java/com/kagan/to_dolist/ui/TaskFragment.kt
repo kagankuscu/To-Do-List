@@ -14,6 +14,7 @@ import com.kagan.to_dolist.constants.Constant.PERSONAL
 import com.kagan.to_dolist.constants.Constant.SHOPPING
 import com.kagan.to_dolist.constants.Constant.STUDY
 import com.kagan.to_dolist.constants.Constant.WORK
+import com.kagan.to_dolist.constants.SimpleDateFormat
 import com.kagan.to_dolist.databinding.FragmentTaskBinding
 import com.kagan.to_dolist.db.TaskDB
 import com.kagan.to_dolist.enums.Category
@@ -43,10 +44,6 @@ class TaskFragment : Fragment(R.layout.fragment_task) {
 
         binding.tvName.text = safeargs.category
         binding.taskRecyclerView.recyclerView.adapter = adapter
-
-        if (adapter.itemCount == 0) {
-            binding.taskRecyclerView.showEmptyView()
-        }
         binding.btnAdd.setOnClickListener {
             navigateToAddTask()
         }
@@ -59,13 +56,14 @@ class TaskFragment : Fragment(R.layout.fragment_task) {
             if (it.isNotEmpty()) {
                 adapter.notifyItemInserted(mTasks.size - 1)
                 binding.taskRecyclerView.hideEmptyView()
+            } else {
+                binding.taskRecyclerView.showEmptyView()
             }
         })
     }
 
     private fun observeSharedViewModel() {
         shareViewModel.task.observe(this, {
-            Log.d(TAG, "observeSharedViewModel:it:$it")
             it?.let {
                 taskViewModel.saveTask(it)
                 shareViewModel.clear()
