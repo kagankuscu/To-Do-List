@@ -9,7 +9,6 @@ import androidx.navigation.fragment.navArgs
 import com.kagan.to_dolist.R
 import com.kagan.to_dolist.constants.SimpleDateFormat
 import com.kagan.to_dolist.databinding.FragmentNewTaskBinding
-import com.kagan.to_dolist.enums.Category
 import com.kagan.to_dolist.models.Task
 import com.kagan.to_dolist.viewModels.ShareViewModel
 
@@ -37,8 +36,24 @@ class NewTaskFragment : Fragment(R.layout.fragment_new_task) {
         }
 
         binding.btnAddTask.setOnClickListener {
-            shareViewModel.setTask(addTask())
-            navigateBackToTaskFragment()
+            var isEmpty: Boolean = false
+
+            if (binding.etTask.text.isEmpty()) {
+                binding.etTask.error =
+                    getString(R.string.new_task_error_message, getString(R.string.title))
+                isEmpty = true
+            }
+
+            if (binding.tvChooseDateShow.text.isEmpty()) {
+                binding.etTask.error =
+                    getString(R.string.new_task_error_message, getString(R.string.date_time))
+                isEmpty = true
+            }
+
+            if (!isEmpty) {
+                shareViewModel.setTask(addTask())
+                navigateBackToTaskFragment()
+            }
         }
     }
 
