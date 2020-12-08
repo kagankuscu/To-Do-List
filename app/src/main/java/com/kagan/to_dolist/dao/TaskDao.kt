@@ -19,4 +19,7 @@ interface TaskDao {
 
     @Query(value = "SELECT * FROM task_table WHERE category LIKE :category")
     fun getAllTaskByCategory(category: Category): LiveData<List<Task>>
+
+    @Query(value = "SELECT COUNT(id) from task_table WHERE category LIKE :category")
+    fun getTotalTaskByCategory(category: Category)
 }
