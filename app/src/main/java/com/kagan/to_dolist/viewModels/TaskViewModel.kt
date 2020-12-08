@@ -21,6 +21,8 @@ class TaskViewModel(private val repository: TaskRepository) : ViewModel() {
         return repository.getAllTaskByCategory(category)
     }
 
+    fun getTotalTaskByCategory(category: Category) = repository.getTotalTaskByCategory(category)
+
     fun saveTask(task: Task) {
         viewModelScope.launch(IO) {
             repository.save(task)
