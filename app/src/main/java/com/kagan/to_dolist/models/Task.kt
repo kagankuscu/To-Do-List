@@ -2,12 +2,12 @@ package com.kagan.to_dolist.models
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.kagan.to_dolist.enums.Category
+import com.kagan.to_dolist.enums.CategoryType
 
 @Entity(tableName = "task_table")
 data class Task(
     val title: String,
-    val category: Category,
+    val categoryType: CategoryType,
     val dueDateTime: Long = 0,
     val isDeleted: Boolean = false
 ) {

@@ -11,7 +11,7 @@ import com.kagan.to_dolist.models.Task
 
 @Database(
     entities = [Task::class],
-    version = 1
+    version = 2
 )
 @TypeConverters(CategoryConverter::class)
 abstract class TaskDB : RoomDatabase() {

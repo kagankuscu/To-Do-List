@@ -8,9 +8,8 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.kagan.to_dolist.R
 import com.kagan.to_dolist.constants.SimpleDateFormat.formatTime
-import com.kagan.to_dolist.enums.Category
+import com.kagan.to_dolist.enums.CategoryType
 import com.kagan.to_dolist.models.Task
-import java.text.SimpleDateFormat
 import java.util.*
 
 class TaskAdapter(private val tasks: ArrayList<Task>) :
@@ -40,12 +39,12 @@ class TaskAdapter(private val tasks: ArrayList<Task>) :
     override fun getItemCount(): Int = tasks.size
 
     private fun setImage(): Int {
-        return when (tasks[0].category) {
-            Category.PERSONAL -> R.drawable.task_personal
-            Category.MEETING -> R.drawable.task_meeting
-            Category.SHOPPING -> R.drawable.task_shopping
-            Category.STUDY -> R.drawable.task_study
-            Category.WORK -> R.drawable.task_work
+        return when (tasks[0].categoryType) {
+            CategoryType.PERSONAL -> R.drawable.task_personal
+            CategoryType.MEETING -> R.drawable.task_meeting
+            CategoryType.SHOPPING -> R.drawable.task_shopping
+            CategoryType.STUDY -> R.drawable.task_study
+            CategoryType.WORK -> R.drawable.task_work
             else -> -1
         }
     }
