@@ -6,7 +6,7 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.kagan.to_dolist.dao.TaskDao
-import com.kagan.to_dolist.enums.converters.CategoryConverter
+import com.kagan.to_dolist.db.converters.CategoryConverter
 import com.kagan.to_dolist.models.Task
 
 @Database(
