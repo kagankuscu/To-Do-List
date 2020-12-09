@@ -1,5 +1,5 @@
 package com.kagan.to_dolist.enums
 
-enum class Category {
+enum class CategoryType {
     PERSONAL, MEETING, SHOPPING, STUDY, WORK, EMPTY
 }

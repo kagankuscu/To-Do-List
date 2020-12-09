@@ -1,23 +1,33 @@
 package com.kagan.to_dolist.db
 
+import android.content.Context
+import androidx.room.Database
+import androidx.room.Room
+import androidx.room.RoomDatabase
 import com.kagan.to_dolist.dao.CategoryDAO
+import com.kagan.to_dolist.models.Category
 
-class CategoryDB {
-    fun getCategoryDao(): CategoryDAO {
-        return CategoryDAO()
-    }
+@Database(
+    entities = [Category::class],
+    version = 1
+)
+abstract class CategoryDB : RoomDatabase() {
+    abstract fun getCategoryDao(): CategoryDAO
 
     companion object {
         @Volatile
-        private var INSTANCE: CategoryDB? = null
+        private var instance: CategoryDB? = null
+        private val LOCK = Any()
 
-        fun getInstance(): CategoryDB {
-            var instance = INSTANCE
-            if (instance == null) {
-                instance = CategoryDB()
-            }
-            return instance
+        operator fun invoke(context: Context) = instance ?: synchronized(LOCK) {
+            instance ?: createDatabase(context).also { instance = it }
         }
+
+        private fun createDatabase(context: Context) = Room.databaseBuilder(
+            context.applicationContext,
+            CategoryDB::class.java,
+            "CategoryDB.db"
+        ).build()
     }
 
 }

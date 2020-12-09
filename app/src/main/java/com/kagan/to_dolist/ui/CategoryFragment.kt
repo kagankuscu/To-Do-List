@@ -203,7 +203,7 @@ class CategoryFragment : Fragment(R.layout.fragment_category) {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        db = CategoryDB.getInstance()
+        db = CategoryDB(requireContext())
         repository = CategoryRepository(db)
         categoryViewModelFactory = CategoryViewModelFactory(repository)
         categoryViewModel =
