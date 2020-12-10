@@ -1,7 +1,6 @@
 package com.kagan.to_dolist.ui
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -14,10 +13,9 @@ import com.kagan.to_dolist.constants.Constant.PERSONAL
 import com.kagan.to_dolist.constants.Constant.SHOPPING
 import com.kagan.to_dolist.constants.Constant.STUDY
 import com.kagan.to_dolist.constants.Constant.WORK
-import com.kagan.to_dolist.constants.SimpleDateFormat
 import com.kagan.to_dolist.databinding.FragmentTaskBinding
 import com.kagan.to_dolist.db.TaskDB
-import com.kagan.to_dolist.enums.Category
+import com.kagan.to_dolist.enums.CategoryType
 import com.kagan.to_dolist.models.Task
 import com.kagan.to_dolist.repositories.TaskRepository
 import com.kagan.to_dolist.viewModels.ShareViewModel
@@ -76,14 +74,14 @@ class TaskFragment : Fragment(R.layout.fragment_task) {
         findNavController().navigate(action)
     }
 
-    private fun getCategoryName(): Category {
+    private fun getCategoryName(): CategoryType {
         return when (safeargs.category) {
-            PERSONAL -> Category.PERSONAL
-            MEETING -> Category.MEETING
-            SHOPPING -> Category.SHOPPING
-            STUDY -> Category.STUDY
-            WORK -> Category.WORK
-            else -> Category.EMPTY
+            PERSONAL -> CategoryType.PERSONAL
+            MEETING -> CategoryType.MEETING
+            SHOPPING -> CategoryType.SHOPPING
+            STUDY -> CategoryType.STUDY
+            WORK -> CategoryType.WORK
+            else -> CategoryType.EMPTY
         }
     }
 
