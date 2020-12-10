@@ -5,12 +5,11 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "category_table")
 data class Category(
-    val personal: Boolean,
-    val meeting: Boolean,
-    val shopping: Boolean,
-    val study: Boolean,
-    val work: Boolean
-) {
-    @PrimaryKey(autoGenerate = true)
-    var id: Int = 0
-}
+    @PrimaryKey(autoGenerate = false)
+    val id: Int= 1,
+    var personal: Boolean,
+    var meeting: Boolean,
+    var shopping: Boolean,
+    var study: Boolean,
+    var work: Boolean
+)

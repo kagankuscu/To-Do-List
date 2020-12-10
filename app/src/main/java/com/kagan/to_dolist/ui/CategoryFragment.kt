@@ -21,6 +21,7 @@ import com.kagan.to_dolist.constants.Constant.STUDY
 import com.kagan.to_dolist.constants.Constant.WORK
 import com.kagan.to_dolist.databinding.FragmentCategoryBinding
 import com.kagan.to_dolist.db.CategoryDB
+import com.kagan.to_dolist.models.Category
 import com.kagan.to_dolist.repositories.CategoryRepository
 import com.kagan.to_dolist.viewModels.CategoryViewModel
 import com.kagan.to_dolist.viewModels.viewModelFactory.CategoryViewModelFactory
@@ -36,6 +37,7 @@ class CategoryFragment : Fragment(R.layout.fragment_category) {
     private lateinit var categoryViewModel: CategoryViewModel
     private lateinit var categoryViewModelFactory: CategoryViewModelFactory
     private lateinit var saveCategory: Map<String, Boolean>
+    private lateinit var category: Category
     private val args: CategoryFragmentArgs by navArgs()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -50,7 +52,10 @@ class CategoryFragment : Fragment(R.layout.fragment_category) {
 
         categoryViewModel.getCategory().observe(viewLifecycleOwner, {
             saveCategory = it
-            Log.d(TAG, "Observe: $it ")
+        })
+
+        categoryViewModel.getCategoryDB().observe(viewLifecycleOwner, {
+            category = it
         })
     }
 
@@ -84,10 +89,20 @@ class CategoryFragment : Fragment(R.layout.fragment_category) {
                 DialogInterface.OnClickListener { _, _ ->
                     if (this::layout.isInitialized) {
                         try {
-//                            binding.gLCategory.addView(layout)
                             val categoriesMap = saveCategory.toMutableMap()
                             categoriesMap[categoryArray] = true
                             categoryViewModel.saved(categoriesMap)
+                            Log.d(TAG, "addView: categoriesMap$categoriesMap")
+                            category.personal = categoriesMap[PERSONAL] ?: false
+                            category.meeting = categoriesMap[MEETING] ?: false
+                            category.shopping = categoriesMap[SHOPPING] ?: false
+                            category.study = categoriesMap[STUDY] ?: false
+                            category.work = categoriesMap[WORK] ?: false
+                            Log.d(TAG, "addView: category$category")
+
+                            categoryViewModel.save(
+                                category
+                            )
                             setLayout(whichCategory)
                         } catch (e: Exception) {
                             Sentry.captureMessage(e.message.toString())
@@ -197,8 +212,6 @@ class CategoryFragment : Fragment(R.layout.fragment_category) {
             categoryViewModel.isEmpty = false
             binding.gLCategory.removeAllViews()
         }
-
-        Log.d(TAG, "setIsEmpty: ${categoryViewModel.isEmpty}")
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -215,8 +228,6 @@ class CategoryFragment : Fragment(R.layout.fragment_category) {
 
     override fun onStart() {
         super.onStart()
-
-        Log.d(TAG, "onStart: isEmpty:${categoryViewModel.isEmpty}")
 
         if (categoryViewModel.isEmpty) {
             setEmptyCard()

@@ -9,7 +9,7 @@ import com.kagan.to_dolist.models.Category
 
 @Database(
     entities = [Category::class],
-    version = 1
+    version = 2
 )
 abstract class CategoryDB : RoomDatabase() {
     abstract fun getCategoryDao(): CategoryDAO
@@ -27,7 +27,7 @@ abstract class CategoryDB : RoomDatabase() {
             context.applicationContext,
             CategoryDB::class.java,
             "CategoryDB.db"
-        ).build()
+        ).fallbackToDestructiveMigration().build()
     }
 
 }

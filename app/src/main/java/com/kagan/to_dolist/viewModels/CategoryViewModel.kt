@@ -1,12 +1,12 @@
 package com.kagan.to_dolist.viewModels
 
 import android.util.Log
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.map
+import androidx.lifecycle.*
 import com.kagan.to_dolist.constants.Constant.PERSONAL
+import com.kagan.to_dolist.models.Category
 import com.kagan.to_dolist.repositories.CategoryRepository
+import kotlinx.coroutines.Dispatchers.IO
+import kotlinx.coroutines.launch
 
 class CategoryViewModel(private val repository: CategoryRepository) : ViewModel() {
 
@@ -22,6 +22,12 @@ class CategoryViewModel(private val repository: CategoryRepository) : ViewModel(
         setEmpty()
     }
 
+    fun save(category: Category) =
+        viewModelScope.launch(IO) {
+            repository.save(category)
+        }
+
+    fun getCategoryDB() = repository.getCategoryDB()
 
     fun getCategory(): LiveData<Map<String, Boolean>> {
         return categories
