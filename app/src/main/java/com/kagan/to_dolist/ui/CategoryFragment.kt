@@ -21,10 +21,16 @@ import com.kagan.to_dolist.constants.Constant.STUDY
 import com.kagan.to_dolist.constants.Constant.WORK
 import com.kagan.to_dolist.databinding.FragmentCategoryBinding
 import com.kagan.to_dolist.db.CategoryDB
+import com.kagan.to_dolist.db.TaskDB
+import com.kagan.to_dolist.enums.CategoryType
 import com.kagan.to_dolist.models.Category
+import com.kagan.to_dolist.models.Task
 import com.kagan.to_dolist.repositories.CategoryRepository
+import com.kagan.to_dolist.repositories.TaskRepository
 import com.kagan.to_dolist.viewModels.CategoryViewModel
+import com.kagan.to_dolist.viewModels.TaskViewModel
 import com.kagan.to_dolist.viewModels.viewModelFactory.CategoryViewModelFactory
+import com.kagan.to_dolist.viewModels.viewModelFactory.TaskViewModelFactory
 import io.sentry.Sentry
 
 class CategoryFragment : Fragment(R.layout.fragment_category) {
@@ -33,9 +39,13 @@ class CategoryFragment : Fragment(R.layout.fragment_category) {
     private lateinit var binding: FragmentCategoryBinding
     private lateinit var layout: View
     private lateinit var db: CategoryDB
+    private lateinit var taskDB: TaskDB
     private lateinit var repository: CategoryRepository
+    private lateinit var taskRepository: TaskRepository
     private lateinit var categoryViewModel: CategoryViewModel
+    private lateinit var taskViewModel: TaskViewModel
     private lateinit var categoryViewModelFactory: CategoryViewModelFactory
+    private lateinit var taskViewModelFactory: TaskViewModelFactory
     private lateinit var saveCategory: Map<String, Boolean>
     private lateinit var category: Category
     private val args: CategoryFragmentArgs by navArgs()
@@ -130,6 +140,7 @@ class CategoryFragment : Fragment(R.layout.fragment_category) {
 
             layout =
                 layoutInflater.inflate(R.layout.category_personal, null, false)
+            setTaskCountText(layout, CategoryType.PERSONAL)
             setCardViewClickListener()
             binding.gLCategory.addView(layout)
         }
@@ -141,6 +152,7 @@ class CategoryFragment : Fragment(R.layout.fragment_category) {
 
             layout =
                 layoutInflater.inflate(R.layout.category_meeting, null, false)
+            setTaskCountText(layout, CategoryType.MEETING)
             setCardViewClickListener()
             binding.gLCategory.addView(layout)
         }
@@ -152,6 +164,7 @@ class CategoryFragment : Fragment(R.layout.fragment_category) {
 
             layout =
                 layoutInflater.inflate(R.layout.category_shopping, null, false)
+            setTaskCountText(layout, CategoryType.SHOPPING)
             setCardViewClickListener()
             binding.gLCategory.addView(layout)
         }
@@ -163,6 +176,7 @@ class CategoryFragment : Fragment(R.layout.fragment_category) {
 
             layout =
                 layoutInflater.inflate(R.layout.category_study, null, false)
+            setTaskCountText(layout, CategoryType.STUDY)
             setCardViewClickListener()
             binding.gLCategory.addView(layout)
         }
@@ -174,9 +188,17 @@ class CategoryFragment : Fragment(R.layout.fragment_category) {
 
             layout =
                 layoutInflater.inflate(R.layout.category_work, null, false)
+            setTaskCountText(layout, CategoryType.WORK)
             setCardViewClickListener()
             binding.gLCategory.addView(layout)
         }
+    }
+
+    private fun setTaskCountText(layout: View, categoryType: CategoryType) {
+        val taskCount = layout.findViewById<TextView>(R.id.tvTaskCount)
+        taskViewModel.getTotalTaskByCategory(categoryType).observe(viewLifecycleOwner, {
+            taskCount.text = getString(R.string.how_many_task, it)
+        })
     }
 
     private fun setEmptyCard() {
@@ -217,10 +239,15 @@ class CategoryFragment : Fragment(R.layout.fragment_category) {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         db = CategoryDB(requireContext())
+        taskDB = TaskDB(requireContext())
         repository = CategoryRepository(db)
+        taskRepository = TaskRepository(taskDB)
         categoryViewModelFactory = CategoryViewModelFactory(repository)
+        taskViewModelFactory = TaskViewModelFactory(taskRepository)
         categoryViewModel =
             ViewModelProvider(this, categoryViewModelFactory).get(CategoryViewModel::class.java)
+        taskViewModel =
+            ViewModelProvider(this, taskViewModelFactory).get(TaskViewModel::class.java)
 
         saveCategory = categoryViewModel.getCategory().value!!
 
