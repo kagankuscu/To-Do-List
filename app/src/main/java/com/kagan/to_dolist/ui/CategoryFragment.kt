@@ -237,13 +237,6 @@ class CategoryFragment : Fragment(R.layout.fragment_category) {
         }
     }
 
-    private fun setIsEmpty() {
-        if (categoryViewModel.isEmpty) {
-            categoryViewModel.isEmpty = false
-            binding.gLCategory.removeAllViews()
-        }
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         db = CategoryDB(requireContext())
@@ -257,25 +250,5 @@ class CategoryFragment : Fragment(R.layout.fragment_category) {
         taskViewModel =
             ViewModelProvider(this, taskViewModelFactory).get(TaskViewModel::class.java)
 
-    }
-
-    override fun onStart() {
-        super.onStart()
-        if (this::lCategory.isInitialized)
-            Log.d(TAG, "onStart: $lCategory")
-        if (categoryViewModel.isEmpty) {
-            setEmptyCard()
-        } else {
-            setPersonalCard()
-            setMeetingCard()
-            setShoppingCard()
-            setStudyCard()
-            setWorkCard()
-        }
-    }
-
-    override fun onStop() {
-        super.onStop()
-        binding.gLCategory.removeAllViews()
     }
 }

@@ -10,11 +10,6 @@ import kotlinx.coroutines.launch
 class CategoryViewModel(private val repository: CategoryRepository) : ViewModel() {
 
     private val TAG = "ViewModel"
-    var isEmpty: Boolean = true
-
-    init {
-//        setEmpty()
-    }
 
     fun save(category: Category) =
         viewModelScope.launch(IO) {
@@ -23,12 +18,4 @@ class CategoryViewModel(private val repository: CategoryRepository) : ViewModel(
 
     fun getCategory() = repository.getCategory()
 
-    private fun setEmpty() {
-//        categories.value?.forEach { _, value ->
-//            if (value) {
-//                isEmpty = false
-//                return@forEach
-//            }
-//        }
-    }
 }
