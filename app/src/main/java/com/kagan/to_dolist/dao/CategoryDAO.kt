@@ -19,5 +19,4 @@ interface CategoryDAO {
 
     @Query(value = "SELECT COUNT(id) FROM category_table")
     fun getCount(): Int
-    // Task Total
 }

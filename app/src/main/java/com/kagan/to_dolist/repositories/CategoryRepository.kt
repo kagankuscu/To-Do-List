@@ -13,10 +13,7 @@ import com.kagan.to_dolist.models.Category
 
 class CategoryRepository(private val db: CategoryDB) {
 
-    private val TAG = "FakeRepo"
-
-    private val category = MutableLiveData<Map<String, Boolean>>()
-    private val categoryMap = mutableMapOf<String, Boolean>()
+    private val TAG = "CategoryRepository"
 
     suspend fun save(category: Category) {
         val count = db.getCategoryDao().getCount()
@@ -28,27 +25,5 @@ class CategoryRepository(private val db: CategoryDB) {
         }
     }
 
-    fun getCategoryDB() = db.getCategoryDao().getCategories()
-
-    fun getCategory(): MutableLiveData<Map<String, Boolean>> {
-        val personal = true
-        val meeting = false
-        val shopping = false
-        val study = false
-        val work = false
-
-        categoryMap[PERSONAL] = personal
-        categoryMap[MEETING] = meeting
-        categoryMap[SHOPPING] = shopping
-        categoryMap[STUDY] = study
-        categoryMap[WORK] = work
-
-        category.value = categoryMap
-
-        return category
-    }
-
-    fun saveCategory() {
-        categoryMap
-    }
+    fun getCategory() = db.getCategoryDao().getCategories()
 }
