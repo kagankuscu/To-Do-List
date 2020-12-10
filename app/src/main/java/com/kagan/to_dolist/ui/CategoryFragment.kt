@@ -21,9 +21,16 @@ import com.kagan.to_dolist.constants.Constant.STUDY
 import com.kagan.to_dolist.constants.Constant.WORK
 import com.kagan.to_dolist.databinding.FragmentCategoryBinding
 import com.kagan.to_dolist.db.CategoryDB
+import com.kagan.to_dolist.db.TaskDB
+import com.kagan.to_dolist.enums.CategoryType
+import com.kagan.to_dolist.models.Category
+import com.kagan.to_dolist.models.Task
 import com.kagan.to_dolist.repositories.CategoryRepository
+import com.kagan.to_dolist.repositories.TaskRepository
 import com.kagan.to_dolist.viewModels.CategoryViewModel
+import com.kagan.to_dolist.viewModels.TaskViewModel
 import com.kagan.to_dolist.viewModels.viewModelFactory.CategoryViewModelFactory
+import com.kagan.to_dolist.viewModels.viewModelFactory.TaskViewModelFactory
 import io.sentry.Sentry
 
 class CategoryFragment : Fragment(R.layout.fragment_category) {
@@ -32,10 +39,15 @@ class CategoryFragment : Fragment(R.layout.fragment_category) {
     private lateinit var binding: FragmentCategoryBinding
     private lateinit var layout: View
     private lateinit var db: CategoryDB
+    private lateinit var taskDB: TaskDB
     private lateinit var repository: CategoryRepository
+    private lateinit var taskRepository: TaskRepository
     private lateinit var categoryViewModel: CategoryViewModel
+    private lateinit var taskViewModel: TaskViewModel
     private lateinit var categoryViewModelFactory: CategoryViewModelFactory
+    private lateinit var taskViewModelFactory: TaskViewModelFactory
     private lateinit var saveCategory: Map<String, Boolean>
+    private lateinit var category: Category
     private val args: CategoryFragmentArgs by navArgs()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -50,7 +62,10 @@ class CategoryFragment : Fragment(R.layout.fragment_category) {
 
         categoryViewModel.getCategory().observe(viewLifecycleOwner, {
             saveCategory = it
-            Log.d(TAG, "Observe: $it ")
+        })
+
+        categoryViewModel.getCategoryDB().observe(viewLifecycleOwner, {
+            category = it
         })
     }
 
@@ -84,10 +99,20 @@ class CategoryFragment : Fragment(R.layout.fragment_category) {
                 DialogInterface.OnClickListener { _, _ ->
                     if (this::layout.isInitialized) {
                         try {
-//                            binding.gLCategory.addView(layout)
                             val categoriesMap = saveCategory.toMutableMap()
                             categoriesMap[categoryArray] = true
                             categoryViewModel.saved(categoriesMap)
+                            Log.d(TAG, "addView: categoriesMap$categoriesMap")
+                            category.personal = categoriesMap[PERSONAL] ?: false
+                            category.meeting = categoriesMap[MEETING] ?: false
+                            category.shopping = categoriesMap[SHOPPING] ?: false
+                            category.study = categoriesMap[STUDY] ?: false
+                            category.work = categoriesMap[WORK] ?: false
+                            Log.d(TAG, "addView: category$category")
+
+                            categoryViewModel.save(
+                                category
+                            )
                             setLayout(whichCategory)
                         } catch (e: Exception) {
                             Sentry.captureMessage(e.message.toString())
@@ -115,6 +140,7 @@ class CategoryFragment : Fragment(R.layout.fragment_category) {
 
             layout =
                 layoutInflater.inflate(R.layout.category_personal, null, false)
+            setTaskCountText(layout, CategoryType.PERSONAL)
             setCardViewClickListener()
             binding.gLCategory.addView(layout)
         }
@@ -126,6 +152,7 @@ class CategoryFragment : Fragment(R.layout.fragment_category) {
 
             layout =
                 layoutInflater.inflate(R.layout.category_meeting, null, false)
+            setTaskCountText(layout, CategoryType.MEETING)
             setCardViewClickListener()
             binding.gLCategory.addView(layout)
         }
@@ -137,6 +164,7 @@ class CategoryFragment : Fragment(R.layout.fragment_category) {
 
             layout =
                 layoutInflater.inflate(R.layout.category_shopping, null, false)
+            setTaskCountText(layout, CategoryType.SHOPPING)
             setCardViewClickListener()
             binding.gLCategory.addView(layout)
         }
@@ -148,6 +176,7 @@ class CategoryFragment : Fragment(R.layout.fragment_category) {
 
             layout =
                 layoutInflater.inflate(R.layout.category_study, null, false)
+            setTaskCountText(layout, CategoryType.STUDY)
             setCardViewClickListener()
             binding.gLCategory.addView(layout)
         }
@@ -159,9 +188,17 @@ class CategoryFragment : Fragment(R.layout.fragment_category) {
 
             layout =
                 layoutInflater.inflate(R.layout.category_work, null, false)
+            setTaskCountText(layout, CategoryType.WORK)
             setCardViewClickListener()
             binding.gLCategory.addView(layout)
         }
+    }
+
+    private fun setTaskCountText(layout: View, categoryType: CategoryType) {
+        val taskCount = layout.findViewById<TextView>(R.id.tvTaskCount)
+        taskViewModel.getTotalTaskByCategory(categoryType).observe(viewLifecycleOwner, {
+            taskCount.text = getString(R.string.how_many_task, it)
+        })
     }
 
     private fun setEmptyCard() {
@@ -197,17 +234,20 @@ class CategoryFragment : Fragment(R.layout.fragment_category) {
             categoryViewModel.isEmpty = false
             binding.gLCategory.removeAllViews()
         }
-
-        Log.d(TAG, "setIsEmpty: ${categoryViewModel.isEmpty}")
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        db = CategoryDB.getInstance()
+        db = CategoryDB(requireContext())
+        taskDB = TaskDB(requireContext())
         repository = CategoryRepository(db)
+        taskRepository = TaskRepository(taskDB)
         categoryViewModelFactory = CategoryViewModelFactory(repository)
+        taskViewModelFactory = TaskViewModelFactory(taskRepository)
         categoryViewModel =
             ViewModelProvider(this, categoryViewModelFactory).get(CategoryViewModel::class.java)
+        taskViewModel =
+            ViewModelProvider(this, taskViewModelFactory).get(TaskViewModel::class.java)
 
         saveCategory = categoryViewModel.getCategory().value!!
 
@@ -215,8 +255,6 @@ class CategoryFragment : Fragment(R.layout.fragment_category) {
 
     override fun onStart() {
         super.onStart()
-
-        Log.d(TAG, "onStart: isEmpty:${categoryViewModel.isEmpty}")
 
         if (categoryViewModel.isEmpty) {
             setEmptyCard()

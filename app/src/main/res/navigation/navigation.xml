@@ -33,7 +33,7 @@
         android:label="TodoListFragment" >
         <argument
             android:name="category"
-            app:argType="com.kagan.to_dolist.enums.Category" />
+            app:argType="com.kagan.to_dolist.enums.CategoryType" />
     </fragment>
     <fragment
         android:id="@+id/onBoardFragment"

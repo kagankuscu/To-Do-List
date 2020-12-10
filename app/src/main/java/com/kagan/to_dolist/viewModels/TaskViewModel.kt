@@ -3,7 +3,7 @@ package com.kagan.to_dolist.viewModels
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.kagan.to_dolist.enums.Category
+import com.kagan.to_dolist.enums.CategoryType
 import com.kagan.to_dolist.models.Task
 import com.kagan.to_dolist.repositories.TaskRepository
 import kotlinx.coroutines.Dispatchers.IO
@@ -17,9 +17,11 @@ class TaskViewModel(private val repository: TaskRepository) : ViewModel() {
         return repository.getAllTask()
     }
 
-    fun getTasksByCategory(category: Category): LiveData<List<Task>> {
-        return repository.getAllTaskByCategory(category)
+    fun getTasksByCategory(categoryType: CategoryType): LiveData<List<Task>> {
+        return repository.getAllTaskByCategory(categoryType)
     }
+
+    fun getTotalTaskByCategory(categoryType: CategoryType) = repository.getTotalTaskByCategory(categoryType)
 
     fun saveTask(task: Task) {
         viewModelScope.launch(IO) {
