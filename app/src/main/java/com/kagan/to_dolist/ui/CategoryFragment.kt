@@ -46,8 +46,8 @@ class CategoryFragment : Fragment(R.layout.fragment_category) {
     private lateinit var taskViewModel: TaskViewModel
     private lateinit var categoryViewModelFactory: CategoryViewModelFactory
     private lateinit var taskViewModelFactory: TaskViewModelFactory
-    private lateinit var saveCategory: Map<String, Boolean>
     private lateinit var category: Category
+    private lateinit var lCategory: Category
     private val args: CategoryFragmentArgs by navArgs()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -61,18 +61,32 @@ class CategoryFragment : Fragment(R.layout.fragment_category) {
         }
 
         categoryViewModel.getCategory().observe(viewLifecycleOwner, {
-            saveCategory = it
-        })
-
-        categoryViewModel.getCategoryDB().observe(viewLifecycleOwner, {
-            category = it
+            if (it == null) {
+                categoryViewModel.save(
+                    Category(
+                        1,
+                        personal = false,
+                        meeting = false,
+                        shopping = false,
+                        study = false,
+                        work = false
+                    )
+                )
+            } else {
+                category = it
+                clearView()
+                setPersonalCard()
+                setMeetingCard()
+                setShoppingCard()
+                setStudyCard()
+                setWorkCard()
+            }
         })
     }
 
     private fun addView() {
 
         var categoryArray = ""
-        var whichCategory = -1
 
         val alertDialog = AlertDialog.Builder(context)
             .setTitle(getString(R.string.add_category))
@@ -82,38 +96,43 @@ class CategoryFragment : Fragment(R.layout.fragment_category) {
                     dialog as AlertDialog
                     dialog.getButton(AlertDialog.BUTTON_POSITIVE).isEnabled = true
                     categoryArray = resources.getStringArray(R.array.categories)[which]
-
-                    if (saveCategory[categoryArray] != true) {
-                        whichCategory = which
-                    } else {
-                        Toast.makeText(
-                            context,
-                            getString(R.string.category_already_exists),
-                            Toast.LENGTH_SHORT
-                        ).show()
-                        dialog.getButton(AlertDialog.BUTTON_POSITIVE).isEnabled = false
-                    }
                 })
             .setPositiveButton(
                 getString(R.string.btn_add),
                 DialogInterface.OnClickListener { _, _ ->
                     if (this::layout.isInitialized) {
                         try {
-                            val categoriesMap = saveCategory.toMutableMap()
-                            categoriesMap[categoryArray] = true
-                            categoryViewModel.saved(categoriesMap)
-                            Log.d(TAG, "addView: categoriesMap$categoriesMap")
-                            category.personal = categoriesMap[PERSONAL] ?: false
-                            category.meeting = categoriesMap[MEETING] ?: false
-                            category.shopping = categoriesMap[SHOPPING] ?: false
-                            category.study = categoriesMap[STUDY] ?: false
-                            category.work = categoriesMap[WORK] ?: false
-                            Log.d(TAG, "addView: category$category")
-
-                            categoryViewModel.save(
-                                category
-                            )
-                            setLayout(whichCategory)
+                            when (categoryArray) {
+                                PERSONAL -> {
+                                    if (!category.personal) {
+                                        category.personal = true
+                                    }
+                                }
+                                MEETING -> {
+                                    if (!category.meeting) {
+                                        category.meeting = true
+                                    }
+                                }
+                                SHOPPING -> {
+                                    if (!category.shopping) {
+                                        category.shopping = true
+                                    }
+                                }
+                                STUDY -> {
+                                    if (!category.study) {
+                                        category.study = true
+                                    }
+                                }
+                                WORK -> {
+                                    if (!category.work) {
+                                        category.work = true
+                                    }
+                                }
+                                else -> Log.d(TAG, "else")
+                            }
+                            Log.d(TAG, "addView: $category")
+                            categoryViewModel.save(category)
+                            lCategory = category
                         } catch (e: Exception) {
                             Sentry.captureMessage(e.message.toString())
                         }
@@ -124,19 +143,12 @@ class CategoryFragment : Fragment(R.layout.fragment_category) {
         alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).isEnabled = false
     }
 
-    private fun setLayout(which: Int? = -1) {
-        when (which) {
-            0 -> setPersonalCard()
-            1 -> setMeetingCard()
-            2 -> setShoppingCard()
-            3 -> setStudyCard()
-            4 -> setWorkCard()
-        }
+    private fun clearView() {
+        binding.gLCategory.removeAllViews()
     }
 
     private fun setPersonalCard() {
-        if (saveCategory[PERSONAL] == true) {
-            setIsEmpty()
+        if (category.personal) {
 
             layout =
                 layoutInflater.inflate(R.layout.category_personal, null, false)
@@ -147,8 +159,7 @@ class CategoryFragment : Fragment(R.layout.fragment_category) {
     }
 
     private fun setMeetingCard() {
-        if (saveCategory[MEETING] == true) {
-            setIsEmpty()
+        if (category.meeting) {
 
             layout =
                 layoutInflater.inflate(R.layout.category_meeting, null, false)
@@ -159,8 +170,7 @@ class CategoryFragment : Fragment(R.layout.fragment_category) {
     }
 
     private fun setShoppingCard() {
-        if (saveCategory[SHOPPING] == true) {
-            setIsEmpty()
+        if (category.shopping) {
 
             layout =
                 layoutInflater.inflate(R.layout.category_shopping, null, false)
@@ -171,8 +181,7 @@ class CategoryFragment : Fragment(R.layout.fragment_category) {
     }
 
     private fun setStudyCard() {
-        if (saveCategory[STUDY] == true) {
-            setIsEmpty()
+        if (category.study) {
 
             layout =
                 layoutInflater.inflate(R.layout.category_study, null, false)
@@ -183,8 +192,7 @@ class CategoryFragment : Fragment(R.layout.fragment_category) {
     }
 
     private fun setWorkCard() {
-        if (saveCategory[WORK] == true) {
-            setIsEmpty()
+        if (category.work) {
 
             layout =
                 layoutInflater.inflate(R.layout.category_work, null, false)
@@ -229,13 +237,6 @@ class CategoryFragment : Fragment(R.layout.fragment_category) {
         }
     }
 
-    private fun setIsEmpty() {
-        if (categoryViewModel.isEmpty) {
-            categoryViewModel.isEmpty = false
-            binding.gLCategory.removeAllViews()
-        }
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         db = CategoryDB(requireContext())
@@ -249,26 +250,5 @@ class CategoryFragment : Fragment(R.layout.fragment_category) {
         taskViewModel =
             ViewModelProvider(this, taskViewModelFactory).get(TaskViewModel::class.java)
 
-        saveCategory = categoryViewModel.getCategory().value!!
-
-    }
-
-    override fun onStart() {
-        super.onStart()
-
-        if (categoryViewModel.isEmpty) {
-            setEmptyCard()
-        } else {
-            setPersonalCard()
-            setMeetingCard()
-            setShoppingCard()
-            setStudyCard()
-            setWorkCard()
-        }
-    }
-
-    override fun onStop() {
-        super.onStop()
-        binding.gLCategory.removeAllViews()
     }
 }

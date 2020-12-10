@@ -2,7 +2,6 @@ package com.kagan.to_dolist.viewModels
 
 import android.util.Log
 import androidx.lifecycle.*
-import com.kagan.to_dolist.constants.Constant.PERSONAL
 import com.kagan.to_dolist.models.Category
 import com.kagan.to_dolist.repositories.CategoryRepository
 import kotlinx.coroutines.Dispatchers.IO
@@ -11,40 +10,12 @@ import kotlinx.coroutines.launch
 class CategoryViewModel(private val repository: CategoryRepository) : ViewModel() {
 
     private val TAG = "ViewModel"
-    private var categories = MutableLiveData<Map<String, Boolean>>()
-    var isEmpty: Boolean = true
-
-    init {
-        Log.d(TAG, "init: ViewModel")
-        Log.d(TAG, "repo: $repository")
-        categories = repository.getCategory()
-        Log.d(TAG, "categories: ${categories.value} ")
-        setEmpty()
-    }
 
     fun save(category: Category) =
         viewModelScope.launch(IO) {
             repository.save(category)
         }
 
-    fun getCategoryDB() = repository.getCategoryDB()
+    fun getCategory() = repository.getCategory()
 
-    fun getCategory(): LiveData<Map<String, Boolean>> {
-        return categories
-    }
-
-    fun saved(categoriesMap: Map<String, Boolean>) {
-        categories.value = categoriesMap
-
-        repository.saveCategory()
-    }
-
-    private fun setEmpty() {
-        categories.value?.forEach { _, value ->
-            if (value) {
-                isEmpty = false
-                return@forEach
-            }
-        }
-    }
 }
