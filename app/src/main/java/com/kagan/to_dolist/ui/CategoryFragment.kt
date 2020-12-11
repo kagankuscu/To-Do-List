@@ -24,7 +24,6 @@ import com.kagan.to_dolist.db.CategoryDB
 import com.kagan.to_dolist.db.TaskDB
 import com.kagan.to_dolist.enums.CategoryType
 import com.kagan.to_dolist.models.Category
-import com.kagan.to_dolist.models.Task
 import com.kagan.to_dolist.repositories.CategoryRepository
 import com.kagan.to_dolist.repositories.TaskRepository
 import com.kagan.to_dolist.viewModels.CategoryViewModel
@@ -47,7 +46,6 @@ class CategoryFragment : Fragment(R.layout.fragment_category) {
     private lateinit var categoryViewModelFactory: CategoryViewModelFactory
     private lateinit var taskViewModelFactory: TaskViewModelFactory
     private lateinit var category: Category
-    private lateinit var lCategory: Category
     private val args: CategoryFragmentArgs by navArgs()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -132,7 +130,7 @@ class CategoryFragment : Fragment(R.layout.fragment_category) {
                             }
                             Log.d(TAG, "addView: $category")
                             categoryViewModel.save(category)
-                            lCategory = category
+
                         } catch (e: Exception) {
                             Sentry.captureMessage(e.message.toString())
                         }
