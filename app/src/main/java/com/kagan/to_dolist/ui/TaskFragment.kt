@@ -1,11 +1,13 @@
 package com.kagan.to_dolist.ui
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.kagan.to_dolist.R
 import com.kagan.to_dolist.adapters.TaskAdapter
 import com.kagan.to_dolist.constants.Constant.MEETING
@@ -51,6 +53,7 @@ class TaskFragment : Fragment(R.layout.fragment_task) {
         taskViewModel.getTasksByCategory(getCategoryName()).observe(this, {
             mTasks.clear()
             mTasks.addAll(it)
+            binding.taskRecyclerView.recyclerView.scrollToPosition(mTasks.size - 1)
             if (it.isNotEmpty()) {
                 adapter.notifyItemInserted(mTasks.size - 1)
                 binding.taskRecyclerView.hideEmptyView()
