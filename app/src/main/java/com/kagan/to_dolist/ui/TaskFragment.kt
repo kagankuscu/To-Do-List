@@ -1,23 +1,15 @@
 package com.kagan.to_dolist.ui
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.kagan.to_dolist.R
 import com.kagan.to_dolist.adapters.TaskAdapter
-import com.kagan.to_dolist.constants.Constant.MEETING
-import com.kagan.to_dolist.constants.Constant.PERSONAL
-import com.kagan.to_dolist.constants.Constant.SHOPPING
-import com.kagan.to_dolist.constants.Constant.STUDY
-import com.kagan.to_dolist.constants.Constant.WORK
 import com.kagan.to_dolist.databinding.FragmentTaskBinding
 import com.kagan.to_dolist.db.TaskDB
-import com.kagan.to_dolist.enums.CategoryType
 import com.kagan.to_dolist.models.Task
 import com.kagan.to_dolist.repositories.TaskRepository
 import com.kagan.to_dolist.viewModels.ShareViewModel
@@ -42,7 +34,7 @@ class TaskFragment : Fragment(R.layout.fragment_task) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentTaskBinding.bind(view)
 
-        binding.tvName.text = safeargs.category
+        binding.tvName.text = safeargs.category.name
         binding.taskRecyclerView.recyclerView.adapter = adapter
         binding.btnAdd.setOnClickListener {
             navigateToAddTask()
@@ -50,7 +42,7 @@ class TaskFragment : Fragment(R.layout.fragment_task) {
     }
 
     private fun observeTasksByCategory(): Unit {
-        taskViewModel.getTasksByCategory(getCategoryName()).observe(this, {
+        taskViewModel.getTasksByCategory(safeargs.category).observe(this, {
             mTasks.clear()
             mTasks.addAll(it)
             binding.taskRecyclerView.recyclerView.scrollToPosition(mTasks.size - 1)
@@ -73,19 +65,8 @@ class TaskFragment : Fragment(R.layout.fragment_task) {
     }
 
     private fun navigateToAddTask() {
-        val action = TaskFragmentDirections.actionTaskFragmentToNewTaskFragment(getCategoryName())
+        val action = TaskFragmentDirections.actionTaskFragmentToNewTaskFragment(safeargs.category)
         findNavController().navigate(action)
-    }
-
-    private fun getCategoryName(): CategoryType {
-        return when (safeargs.category) {
-            PERSONAL -> CategoryType.PERSONAL
-            MEETING -> CategoryType.MEETING
-            SHOPPING -> CategoryType.SHOPPING
-            STUDY -> CategoryType.STUDY
-            WORK -> CategoryType.WORK
-            else -> CategoryType.EMPTY
-        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -96,7 +77,7 @@ class TaskFragment : Fragment(R.layout.fragment_task) {
         taskViewModel = ViewModelProvider(this, taskViewModelFactory).get(TaskViewModel::class.java)
         shareViewModel = ViewModelProvider(requireActivity()).get(ShareViewModel::class.java)
 
-        taskViewModel.getTasksByCategory(getCategoryName())
+        taskViewModel.getTasksByCategory(safeargs.category)
         adapter = TaskAdapter(mTasks)
 
         observeSharedViewModel()
