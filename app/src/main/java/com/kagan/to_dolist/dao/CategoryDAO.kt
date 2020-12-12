@@ -12,7 +12,7 @@ interface CategoryDAO {
     suspend fun upsert(category: Category)
 
     @Query(value = "SELECT * FROM category_table")
-    fun getCategories(): LiveData<Category>
+    fun getCategories(): LiveData<List<Category>>
 
     @Update
     suspend fun update(category: Category)
