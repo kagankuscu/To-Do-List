@@ -4,13 +4,16 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import androidx.room.TypeConverters
 import com.kagan.to_dolist.dao.CategoryDAO
+import com.kagan.to_dolist.db.converters.CategoryConverter
 import com.kagan.to_dolist.models.Category
 
 @Database(
     entities = [Category::class],
-    version = 2
+    version = 3
 )
+@TypeConverters(CategoryConverter::class)
 abstract class CategoryDB : RoomDatabase() {
     abstract fun getCategoryDao(): CategoryDAO
 
