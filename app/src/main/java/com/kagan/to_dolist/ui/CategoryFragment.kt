@@ -5,12 +5,18 @@ import android.content.DialogInterface
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.GridLayoutManager
 import com.kagan.to_dolist.R
 import com.kagan.to_dolist.adapters.CategoryAdapter
+import com.kagan.to_dolist.constants.Constant.MEETING
+import com.kagan.to_dolist.constants.Constant.PERSONAL
+import com.kagan.to_dolist.constants.Constant.SHOPPING
+import com.kagan.to_dolist.constants.Constant.STUDY
+import com.kagan.to_dolist.constants.Constant.WORK
 import com.kagan.to_dolist.databinding.FragmentCategoryBinding
 import com.kagan.to_dolist.db.CategoryDB
 import com.kagan.to_dolist.db.TaskDB
@@ -35,7 +41,6 @@ class CategoryFragment : Fragment(R.layout.fragment_category) {
 
     private val TAG = "CategoryFragment"
     private lateinit var binding: FragmentCategoryBinding
-    private lateinit var layout: View
     private lateinit var db: CategoryDB
     private lateinit var taskDB: TaskDB
     private lateinit var repository: CategoryRepository
@@ -66,7 +71,7 @@ class CategoryFragment : Fragment(R.layout.fragment_category) {
             }
             setTaskCountText()
         })
-
+        Log.d(TAG, "onViewCreated: ")
         binding.rvCategory.recyclerView.layoutManager = GridLayoutManager(context, 2)
         binding.rvCategory.recyclerView.adapter = adapter
     }
@@ -83,20 +88,34 @@ class CategoryFragment : Fragment(R.layout.fragment_category) {
                     dialog as AlertDialog
                     dialog.getButton(AlertDialog.BUTTON_POSITIVE).isEnabled = true
                     categoryArray = resources.getStringArray(R.array.categories)[which]
+                    categoriesTaskCount.forEach {
+                        Log.d(TAG, "addView: ${it.categoryType}")
+                        if (it.categoryType.toString().equals(categoryArray, ignoreCase = true)) {
+                            dialog.getButton(AlertDialog.BUTTON_POSITIVE).isEnabled = false
+                        }
+                    }
                 })
             .setPositiveButton(
                 getString(R.string.btn_add),
                 DialogInterface.OnClickListener { _, _ ->
-                    if (this::layout.isInitialized) {
-                        try {
+                    try {
 
-                            Log.d(TAG, "addView: $category")
-                            categoryViewModel.save(category)
-
-                        } catch (e: Exception) {
-                            Sentry.captureMessage(e.message.toString())
+                        val type = when (categoryArray) {
+                            PERSONAL -> CategoryType.PERSONAL
+                            MEETING -> CategoryType.MEETING
+                            SHOPPING -> CategoryType.SHOPPING
+                            STUDY -> CategoryType.STUDY
+                            WORK -> CategoryType.WORK
+                            else -> CategoryType.EMPTY
                         }
+
+                        categoryViewModel.save(Category(type))
+
+                    } catch (e: Exception) {
+                        Log.d(TAG, "addView: ${e.message}")
+                        Sentry.captureMessage(e.message.toString())
                     }
+
                 })
             .show()
 
