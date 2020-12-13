@@ -62,10 +62,15 @@ class CategoryFragment : Fragment(R.layout.fragment_category) {
 
         categoryViewModel.getCategory().observe(viewLifecycleOwner, {
             categoriesTaskCount.clear()
-            it.forEach { cat ->
-                categoriesTaskCount.add(CategoryTaskCount(cat.categoryType))
+            if (it.isEmpty()) {
+                binding.rvCategory.showEmptyView()
+            } else {
+                binding.rvCategory.hideEmptyView()
+                it.forEach { cat ->
+                    categoriesTaskCount.add(CategoryTaskCount(cat.categoryType))
+                }
+                setTaskCountText()
             }
-            setTaskCountText()
         })
         binding.rvCategory.recyclerView.layoutManager = GridLayoutManager(context, 2)
         binding.rvCategory.recyclerView.adapter = adapter
