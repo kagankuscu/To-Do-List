@@ -17,7 +17,7 @@ class TaskRepository(private val db: TaskDB) {
         return db.getTaskDao().getAllTaskByCategory(categoryType)
     }
 
-    fun getTotalTaskByCategory(categoryType: CategoryType) =
+    suspend fun getTotalTaskByCategory(categoryType: CategoryType) =
         db.getTaskDao().getTotalTaskByCategory(categoryType)
 
     suspend fun save(task: Task) {

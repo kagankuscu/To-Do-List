@@ -6,5 +6,5 @@ import com.kagan.to_dolist.enums.CategoryType
 
 data class CategoryTaskCount(
     var categoryType: CategoryType,
-    var taskCount: String
+    var taskCount: String=""
 )

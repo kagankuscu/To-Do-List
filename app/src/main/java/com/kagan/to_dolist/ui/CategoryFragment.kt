@@ -24,6 +24,12 @@ import com.kagan.to_dolist.viewModels.TaskViewModel
 import com.kagan.to_dolist.viewModels.viewModelFactory.CategoryViewModelFactory
 import com.kagan.to_dolist.viewModels.viewModelFactory.TaskViewModelFactory
 import io.sentry.Sentry
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers.IO
+import kotlinx.coroutines.Dispatchers.Main
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.awaitCancellation
+import kotlinx.coroutines.launch
 
 class CategoryFragment : Fragment(R.layout.fragment_category) {
 
@@ -40,7 +46,6 @@ class CategoryFragment : Fragment(R.layout.fragment_category) {
     private lateinit var taskViewModelFactory: TaskViewModelFactory
     private lateinit var category: Category
     private lateinit var adapter: CategoryAdapter
-    private lateinit var categories: ArrayList<Category>
     private lateinit var categoriesTaskCount: ArrayList<CategoryTaskCount>
     private val args: CategoryFragmentArgs by navArgs()
 
@@ -55,12 +60,11 @@ class CategoryFragment : Fragment(R.layout.fragment_category) {
         }
 
         categoryViewModel.getCategory().observe(viewLifecycleOwner, {
-            categories.clear()
-            categories.addAll(it)
             categoriesTaskCount.clear()
             it.forEach { cat ->
-                setTaskCountText(cat.categoryType)
+                categoriesTaskCount.add(CategoryTaskCount(cat.categoryType))
             }
+            setTaskCountText()
         })
 
         binding.rvCategory.recyclerView.layoutManager = GridLayoutManager(context, 2)
@@ -99,12 +103,18 @@ class CategoryFragment : Fragment(R.layout.fragment_category) {
         alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).isEnabled = false
     }
 
-    private fun setTaskCountText(categoryType: CategoryType) {
-        taskViewModel.getTotalTaskByCategory(categoryType).observe(viewLifecycleOwner, {
-            val size = getString(R.string.how_many_task, it)
-            categoriesTaskCount.add(CategoryTaskCount(categoryType, size))
-            adapter.notifyDataSetChanged()
-        })
+    private fun setTaskCountText() {
+        categoriesTaskCount.forEach {
+            var count = -1
+            val job = GlobalScope.launch(IO) {
+                count = taskViewModel.getTotalTaskByCategory(it.categoryType)
+            }
+            GlobalScope.launch(Main) {
+                job.join()
+                it.taskCount = getString(R.string.how_many_task, count)
+                adapter.notifyDataSetChanged()
+            }
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -120,7 +130,6 @@ class CategoryFragment : Fragment(R.layout.fragment_category) {
         taskViewModel =
             ViewModelProvider(this, taskViewModelFactory).get(TaskViewModel::class.java)
 
-        categories = arrayListOf()
         categoriesTaskCount = arrayListOf()
         adapter = CategoryAdapter(categoriesTaskCount)
 
