@@ -10,10 +10,10 @@ import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.kagan.to_dolist.R
 import com.kagan.to_dolist.enums.CategoryType
-import com.kagan.to_dolist.models.Category
+import com.kagan.to_dolist.models.CategoryTaskCount
 import com.kagan.to_dolist.ui.CategoryFragmentDirections
 
-class CategoryAdapter(private val categories: List<Category>) :
+class CategoryAdapter(private val categories: List<CategoryTaskCount>) :
     RecyclerView.Adapter<CategoryAdapter.ViewHolder>() {
 
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -37,6 +37,7 @@ class CategoryAdapter(private val categories: List<Category>) :
             }
             imCategory.setImageResource(setImage(position))
             tvCategory.text = categories[position].categoryType.name
+            tvTaskCount.text = categories[position].taskCount
         }
     }
 

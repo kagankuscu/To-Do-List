@@ -5,13 +5,8 @@ import android.content.DialogInterface
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.widget.GridLayout
-import android.widget.TextView
-import android.widget.Toast
-import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.GridLayoutManager
 import com.kagan.to_dolist.R
@@ -21,6 +16,7 @@ import com.kagan.to_dolist.db.CategoryDB
 import com.kagan.to_dolist.db.TaskDB
 import com.kagan.to_dolist.enums.CategoryType
 import com.kagan.to_dolist.models.Category
+import com.kagan.to_dolist.models.CategoryTaskCount
 import com.kagan.to_dolist.repositories.CategoryRepository
 import com.kagan.to_dolist.repositories.TaskRepository
 import com.kagan.to_dolist.viewModels.CategoryViewModel
@@ -45,6 +41,7 @@ class CategoryFragment : Fragment(R.layout.fragment_category) {
     private lateinit var category: Category
     private lateinit var adapter: CategoryAdapter
     private lateinit var categories: ArrayList<Category>
+    private lateinit var categoriesTaskCount: ArrayList<CategoryTaskCount>
     private val args: CategoryFragmentArgs by navArgs()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -60,8 +57,10 @@ class CategoryFragment : Fragment(R.layout.fragment_category) {
         categoryViewModel.getCategory().observe(viewLifecycleOwner, {
             categories.clear()
             categories.addAll(it)
-            adapter.notifyDataSetChanged()
-
+            categoriesTaskCount.clear()
+            it.forEach { cat ->
+                setTaskCountText(cat.categoryType)
+            }
         })
 
         binding.rvCategory.recyclerView.layoutManager = GridLayoutManager(context, 2)
@@ -100,10 +99,11 @@ class CategoryFragment : Fragment(R.layout.fragment_category) {
         alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).isEnabled = false
     }
 
-    private fun setTaskCountText(layout: View, categoryType: CategoryType) {
-        val taskCount = layout.findViewById<TextView>(R.id.tvTaskCount)
+    private fun setTaskCountText(categoryType: CategoryType) {
         taskViewModel.getTotalTaskByCategory(categoryType).observe(viewLifecycleOwner, {
-            taskCount.text = getString(R.string.how_many_task, it)
+            val size = getString(R.string.how_many_task, it)
+            categoriesTaskCount.add(CategoryTaskCount(categoryType, size))
+            adapter.notifyDataSetChanged()
         })
     }
 
@@ -121,7 +121,8 @@ class CategoryFragment : Fragment(R.layout.fragment_category) {
             ViewModelProvider(this, taskViewModelFactory).get(TaskViewModel::class.java)
 
         categories = arrayListOf()
-        adapter = CategoryAdapter(categories)
+        categoriesTaskCount = arrayListOf()
+        adapter = CategoryAdapter(categoriesTaskCount)
 
     }
 }
