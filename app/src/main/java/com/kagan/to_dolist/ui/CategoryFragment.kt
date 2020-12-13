@@ -5,7 +5,6 @@ import android.content.DialogInterface
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.navArgs
@@ -30,11 +29,9 @@ import com.kagan.to_dolist.viewModels.TaskViewModel
 import com.kagan.to_dolist.viewModels.viewModelFactory.CategoryViewModelFactory
 import com.kagan.to_dolist.viewModels.viewModelFactory.TaskViewModelFactory
 import io.sentry.Sentry
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.Dispatchers.Main
 import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.awaitCancellation
 import kotlinx.coroutines.launch
 
 class CategoryFragment : Fragment(R.layout.fragment_category) {
@@ -71,7 +68,6 @@ class CategoryFragment : Fragment(R.layout.fragment_category) {
             }
             setTaskCountText()
         })
-        Log.d(TAG, "onViewCreated: ")
         binding.rvCategory.recyclerView.layoutManager = GridLayoutManager(context, 2)
         binding.rvCategory.recyclerView.adapter = adapter
     }
