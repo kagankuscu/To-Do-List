@@ -46,7 +46,6 @@ class CategoryFragment : Fragment(R.layout.fragment_category) {
     private lateinit var taskViewModel: TaskViewModel
     private lateinit var categoryViewModelFactory: CategoryViewModelFactory
     private lateinit var taskViewModelFactory: TaskViewModelFactory
-    private lateinit var category: Category
     private lateinit var adapter: CategoryAdapter
     private lateinit var categoriesTaskCount: ArrayList<CategoryTaskCount>
     private val args: CategoryFragmentArgs by navArgs()
