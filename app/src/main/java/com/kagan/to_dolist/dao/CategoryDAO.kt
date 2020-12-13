@@ -11,8 +11,8 @@ interface CategoryDAO {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun upsert(category: Category)
 
-    @Query(value = "SELECT * FROM category_table")
-    fun getCategories(): LiveData<Category>
+    @Query(value = "SELECT * FROM category_table ORDER BY categoryType")
+    fun getCategories(): LiveData<List<Category>>
 
     @Update
     suspend fun update(category: Category)

@@ -30,7 +30,7 @@ class TaskAdapter(private val tasks: ArrayList<Task>) :
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.apply {
-            ivCategoryColor.setImageResource(setImage())
+            ivCategoryColor.setImageResource(setImage(position))
             tvTime.text = formatTime(tasks[position].dueDateTime)
             tvTaskDesc.text = tasks[position].title
         }
@@ -38,14 +38,14 @@ class TaskAdapter(private val tasks: ArrayList<Task>) :
 
     override fun getItemCount(): Int = tasks.size
 
-    private fun setImage(): Int {
-        return when (tasks[0].categoryType) {
+    private fun setImage(position: Int): Int {
+        return when (tasks[position].categoryType) {
             CategoryType.PERSONAL -> R.drawable.task_personal
             CategoryType.MEETING -> R.drawable.task_meeting
             CategoryType.SHOPPING -> R.drawable.task_shopping
             CategoryType.STUDY -> R.drawable.task_study
             CategoryType.WORK -> R.drawable.task_work
-            else -> -1
+            else -> R.drawable.task_unknown
         }
     }
 }

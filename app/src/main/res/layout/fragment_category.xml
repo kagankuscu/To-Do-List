@@ -51,34 +51,16 @@
         app:layout_constraintStart_toStartOf="@+id/guidelineProjectStart"
         app:layout_constraintTop_toBottomOf="@+id/dashboard" />
 
-    <androidx.core.widget.NestedScrollView
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/scroll_height"
-        android:layout_marginStart="@dimen/scroll_margin_start"
-        android:layout_marginEnd="@dimen/scroll_margin_end"
+    <com.kagan.to_dolist.customViews.TaskRecyclerView
+        android:id="@+id/rvCategory"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@id/guidelineProjectEnd"
-        app:layout_constraintStart_toStartOf="@id/guidelineProjectStart"
-        app:layout_constraintTop_toBottomOf="@+id/tvProject">
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <GridLayout
-                android:id="@+id/gLCategory"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:columnCount="2"
-                android:orientation="horizontal"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
-
-            </GridLayout>
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </androidx.core.widget.NestedScrollView>
+        app:layout_constraintEnd_toEndOf="@+id/guidelineProjectEnd"
+        app:layout_constraintStart_toStartOf="@+id/guidelineProjectStart"
+        app:layout_constraintTop_toBottomOf="@+id/tvProject"
+        app:mainText="@string/Category"
+        app:subText="@string/category" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/btnAdd"

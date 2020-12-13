@@ -40,4 +40,5 @@
     <string name="Title">Title</string>
     <string name="date_time">Time</string>
     <string name="how_many_task">%d Task</string>
+    <string name="Category">Category</string>
 </resources>

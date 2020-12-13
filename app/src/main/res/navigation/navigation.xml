@@ -22,7 +22,7 @@
         tools:layout="@layout/fragment_task" >
         <argument
             android:name="category"
-            app:argType="string" />
+            app:argType="com.kagan.to_dolist.enums.CategoryType" />
         <action
             android:id="@+id/action_taskFragment_to_newTaskFragment"
             app:destination="@id/newTaskFragment" />

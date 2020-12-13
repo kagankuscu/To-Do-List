@@ -21,5 +21,5 @@ interface TaskDao {
     fun getAllTaskByCategory(categoryType: CategoryType): LiveData<List<Task>>
 
     @Query(value = "SELECT COUNT(id) from task_table WHERE categoryType LIKE :categoryType")
-    fun getTotalTaskByCategory(categoryType: CategoryType): LiveData<Int>
+    suspend fun getTotalTaskByCategory(categoryType: CategoryType): Int
 }
