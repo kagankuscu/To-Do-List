@@ -22,4 +22,7 @@ interface TaskDao {
 
     @Query(value = "SELECT COUNT(id) from task_table WHERE categoryType LIKE :categoryType")
     suspend fun getTotalTaskByCategory(categoryType: CategoryType): Int
+
+    @Update
+    suspend fun completed(task: Task)
 }

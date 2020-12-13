@@ -2,12 +2,14 @@ package com.kagan.to_dolist.ui
 
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.kagan.to_dolist.R
 import com.kagan.to_dolist.adapters.TaskAdapter
+import com.kagan.to_dolist.constants.SetTaskOnClickListener
 import com.kagan.to_dolist.databinding.FragmentTaskBinding
 import com.kagan.to_dolist.db.TaskDB
 import com.kagan.to_dolist.models.Task
@@ -16,7 +18,7 @@ import com.kagan.to_dolist.viewModels.ShareViewModel
 import com.kagan.to_dolist.viewModels.TaskViewModel
 import com.kagan.to_dolist.viewModels.viewModelFactory.TaskViewModelFactory
 
-class TaskFragment : Fragment(R.layout.fragment_task) {
+class TaskFragment : Fragment(R.layout.fragment_task), SetTaskOnClickListener {
 
     val TAG = "TaskFragment"
     private lateinit var binding: FragmentTaskBinding
@@ -43,14 +45,17 @@ class TaskFragment : Fragment(R.layout.fragment_task) {
 
     private fun observeTasksByCategory(): Unit {
         taskViewModel.getTasksByCategory(safeargs.category).observe(this, {
+            val oldSize = mTasks.size
             mTasks.clear()
             mTasks.addAll(it)
-            binding.taskRecyclerView.recyclerView.scrollToPosition(mTasks.size - 1)
-            if (it.isNotEmpty()) {
-                adapter.notifyItemInserted(mTasks.size - 1)
-                binding.taskRecyclerView.hideEmptyView()
-            } else {
-                binding.taskRecyclerView.showEmptyView()
+            if (oldSize != mTasks.size) {
+                binding.taskRecyclerView.recyclerView.scrollToPosition(mTasks.size - 1)
+                if (it.isNotEmpty()) {
+                    adapter.notifyItemInserted(mTasks.size - 1)
+                    binding.taskRecyclerView.hideEmptyView()
+                } else {
+                    binding.taskRecyclerView.showEmptyView()
+                }
             }
         })
     }
@@ -78,9 +83,20 @@ class TaskFragment : Fragment(R.layout.fragment_task) {
         shareViewModel = ViewModelProvider(requireActivity()).get(ShareViewModel::class.java)
 
         taskViewModel.getTasksByCategory(safeargs.category)
-        adapter = TaskAdapter(mTasks)
+        adapter = TaskAdapter(mTasks, this)
 
         observeSharedViewModel()
         observeTasksByCategory()
+    }
+
+    override fun onItemClick(position: Int, task: Task) {
+        Toast.makeText(
+            context,
+            "OnClickListener $position isCompleted=${task.isCompleted}",
+            Toast.LENGTH_SHORT
+        ).show()
+        task.isCompleted = true
+        taskViewModel.completed(task)
+        adapter.notifyItemChanged(position)
     }
 }

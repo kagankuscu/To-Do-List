@@ -29,4 +29,12 @@ class TaskViewModel(private val repository: TaskRepository) : ViewModel() {
             repository.save(task)
         }
     }
+
+    fun completed(task: Task) = viewModelScope.launch(IO) {
+        repository.completed(task)
+    }
+
+    fun delete(task: Task) = viewModelScope.launch(IO) {
+        repository.delete(task)
+    }
 }

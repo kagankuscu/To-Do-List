@@ -9,6 +9,7 @@ data class Task(
     val title: String,
     val categoryType: CategoryType,
     val dueDateTime: Long = 0,
+    var isCompleted: Boolean = false,
     val isDeleted: Boolean = false
 ) {
     @PrimaryKey(autoGenerate = true)
