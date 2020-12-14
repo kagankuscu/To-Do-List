@@ -23,10 +23,11 @@ class TaskAdapter(
     private val TAG = "TaskAdapter"
 
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val cardView: CardView = view.findViewById(R.id.cardView)
+        private val cardView: CardView = view.findViewById(R.id.cardView)
         var ivCategoryColor: ImageView = view.findViewById(R.id.ivCategoryColor)
         var tvTime: TextView = view.findViewById(R.id.tvTime)
         var tvTaskDesc: TextView = view.findViewById(R.id.tvTaskDesc)
+        var ivCheck: ImageView = view.findViewById(R.id.ivCheck)
 
         init {
             cardView.setOnClickListener {
@@ -48,6 +49,10 @@ class TaskAdapter(
             ivCategoryColor.setImageResource(setImage(position))
             tvTime.text = formatTime(tasks[position].dueDateTime)
             tvTaskDesc.text = tasks[position].title
+
+            if (tasks[position].isCompleted) {
+                ivCheck.setImageResource(R.drawable.ic_checked_circle)
+            }
         }
     }
 
