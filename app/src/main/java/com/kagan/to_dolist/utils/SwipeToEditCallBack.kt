@@ -4,8 +4,8 @@ import android.content.Context
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 
-abstract class SwipeToDeleteCallBack(val context: Context) :
-    ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
+abstract class SwipeToEditCallBack(context: Context) :
+    ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.RIGHT) {
 
     override fun onMove(
         recyclerView: RecyclerView,

@@ -17,6 +17,7 @@ import com.kagan.to_dolist.db.TaskDB
 import com.kagan.to_dolist.models.Task
 import com.kagan.to_dolist.repositories.TaskRepository
 import com.kagan.to_dolist.utils.SwipeToDeleteCallBack
+import com.kagan.to_dolist.utils.SwipeToEditCallBack
 import com.kagan.to_dolist.viewModels.ShareViewModel
 import com.kagan.to_dolist.viewModels.TaskViewModel
 import com.kagan.to_dolist.viewModels.viewModelFactory.TaskViewModelFactory
@@ -34,6 +35,7 @@ class TaskFragment : Fragment(R.layout.fragment_task), SetTaskOnClickListener {
     private lateinit var adapter: TaskAdapter
     private val mTasks = ArrayList<Task>()
     private lateinit var swipeHandler: SwipeToDeleteCallBack
+    private lateinit var swipeEdit: SwipeToEditCallBack
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -48,6 +50,10 @@ class TaskFragment : Fragment(R.layout.fragment_task), SetTaskOnClickListener {
 
         val itemTouchHelper = ItemTouchHelper(swipeHandler)
         itemTouchHelper.attachToRecyclerView(binding.taskRecyclerView.recyclerView)
+
+
+        val itemEdit = ItemTouchHelper(swipeEdit)
+        itemEdit.attachToRecyclerView(binding.taskRecyclerView.recyclerView)
     }
 
     private fun observeTasksByCategory(): Unit {
@@ -93,7 +99,13 @@ class TaskFragment : Fragment(R.layout.fragment_task), SetTaskOnClickListener {
         adapter = TaskAdapter(mTasks, this)
         swipeHandler = object : SwipeToDeleteCallBack(requireContext()) {
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-                Toast.makeText(context, "Swiped", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, "Deleted", Toast.LENGTH_SHORT).show()
+            }
+        }
+
+        swipeEdit = object : SwipeToEditCallBack(requireContext()) {
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                Toast.makeText(context, "Edit", Toast.LENGTH_SHORT).show()
             }
         }
 
