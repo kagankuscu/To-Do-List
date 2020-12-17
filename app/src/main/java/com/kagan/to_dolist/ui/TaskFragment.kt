@@ -1,6 +1,7 @@
 package com.kagan.to_dolist.ui
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.fragment.app.Fragment
@@ -9,6 +10,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.snackbar.Snackbar
 import com.kagan.to_dolist.R
 import com.kagan.to_dolist.adapters.TaskAdapter
 import com.kagan.to_dolist.constants.SetTaskOnClickListener
@@ -21,6 +23,9 @@ import com.kagan.to_dolist.utils.SwipeToEditCallBack
 import com.kagan.to_dolist.viewModels.ShareViewModel
 import com.kagan.to_dolist.viewModels.TaskViewModel
 import com.kagan.to_dolist.viewModels.viewModelFactory.TaskViewModelFactory
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers.IO
+import kotlinx.coroutines.launch
 
 class TaskFragment : Fragment(R.layout.fragment_task), SetTaskOnClickListener {
 
@@ -99,18 +104,23 @@ class TaskFragment : Fragment(R.layout.fragment_task), SetTaskOnClickListener {
         adapter = TaskAdapter(mTasks, this)
         swipeHandler = object : SwipeToDeleteCallBack(requireContext()) {
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-                Toast.makeText(context, "Deleted", Toast.LENGTH_SHORT).show()
+                Log.d(TAG, "onSwiped: ${mTasks[viewHolder.adapterPosition]}")
+                val task = mTasks[viewHolder.adapterPosition]
+                task.isDeleted = true
+                mTasks.removeAt(viewHolder.adapterPosition)
+                adapter.notifyItemRemoved(viewHolder.adapterPosition)
+                taskViewModel.delete(task)
+                showSnackBar(task)
             }
         }
-
         swipeEdit = object : SwipeToEditCallBack(requireContext()) {
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                 Toast.makeText(context, "Edit", Toast.LENGTH_SHORT).show()
             }
         }
-
         observeSharedViewModel()
         observeTasksByCategory()
+
     }
 
     override fun onItemClick(position: Int, task: Task) {
@@ -122,5 +132,18 @@ class TaskFragment : Fragment(R.layout.fragment_task), SetTaskOnClickListener {
         task.isCompleted = true
         taskViewModel.completed(task)
         adapter.notifyItemChanged(position)
+    }
+
+    private fun showSnackBar(task: Task) {
+        Snackbar.make(
+            requireView(),
+            "Task Deleted.",
+            Snackbar.LENGTH_SHORT
+        )
+            .setAction("Restore", View.OnClickListener {
+                task.isDeleted = false
+                taskViewModel.restore(task)
+            })
+            .show()
     }
 }

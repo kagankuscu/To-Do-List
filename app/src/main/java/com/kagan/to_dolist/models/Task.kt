@@ -10,7 +10,7 @@ data class Task(
     val categoryType: CategoryType,
     val dueDateTime: Long = 0,
     var isCompleted: Boolean = false,
-    val isDeleted: Boolean = false
+    var isDeleted: Boolean = false
 ) {
     @PrimaryKey(autoGenerate = true)
     var id: Long = 0L

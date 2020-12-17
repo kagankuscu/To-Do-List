@@ -37,4 +37,10 @@ class TaskViewModel(private val repository: TaskRepository) : ViewModel() {
     fun delete(task: Task) = viewModelScope.launch(IO) {
         repository.delete(task)
     }
+
+    fun restore(task: Task) = viewModelScope.launch(IO) {
+        repository.restore(task)
+    }
+
+    fun getTaskById(itemId: Long) = repository.getTaskById(itemId)
 }

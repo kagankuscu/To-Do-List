@@ -11,18 +11,24 @@ interface TaskDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun upsert(task: Task)
 
-    @Delete
+    @Update
     suspend fun deleted(task: Task)
 
     @Query(value = "SELECT * FROM task_table")
     fun getAllTasks(): LiveData<List<Task>>
 
-    @Query(value = "SELECT * FROM task_table WHERE categoryType LIKE :categoryType")
+    @Query(value = "SELECT * FROM task_table WHERE categoryType=:categoryType AND isDeleted=0")
     fun getAllTaskByCategory(categoryType: CategoryType): LiveData<List<Task>>
 
-    @Query(value = "SELECT COUNT(id) from task_table WHERE categoryType LIKE :categoryType")
+    @Query(value = "SELECT COUNT(id) from task_table WHERE categoryType=:categoryType AND isDeleted=0")
     suspend fun getTotalTaskByCategory(categoryType: CategoryType): Int
 
     @Update
     suspend fun completed(task: Task)
+
+    @Update
+    suspend fun restore(task: Task)
+
+    @Query(value = "SELECT * FROM task_table WHERE id=:itemId")
+    fun getTaskById(itemId: Long): Task
 }
