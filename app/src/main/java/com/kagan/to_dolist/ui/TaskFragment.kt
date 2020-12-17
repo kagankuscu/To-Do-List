@@ -7,6 +7,8 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import androidx.recyclerview.widget.ItemTouchHelper
+import androidx.recyclerview.widget.RecyclerView
 import com.kagan.to_dolist.R
 import com.kagan.to_dolist.adapters.TaskAdapter
 import com.kagan.to_dolist.constants.SetTaskOnClickListener
@@ -14,6 +16,7 @@ import com.kagan.to_dolist.databinding.FragmentTaskBinding
 import com.kagan.to_dolist.db.TaskDB
 import com.kagan.to_dolist.models.Task
 import com.kagan.to_dolist.repositories.TaskRepository
+import com.kagan.to_dolist.utils.SwipeToDeleteCallBack
 import com.kagan.to_dolist.viewModels.ShareViewModel
 import com.kagan.to_dolist.viewModels.TaskViewModel
 import com.kagan.to_dolist.viewModels.viewModelFactory.TaskViewModelFactory
@@ -30,6 +33,7 @@ class TaskFragment : Fragment(R.layout.fragment_task), SetTaskOnClickListener {
     private lateinit var taskViewModelFactory: TaskViewModelFactory
     private lateinit var adapter: TaskAdapter
     private val mTasks = ArrayList<Task>()
+    private lateinit var swipeHandler: SwipeToDeleteCallBack
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -41,6 +45,9 @@ class TaskFragment : Fragment(R.layout.fragment_task), SetTaskOnClickListener {
         binding.btnAdd.setOnClickListener {
             navigateToAddTask()
         }
+
+        val itemTouchHelper = ItemTouchHelper(swipeHandler)
+        itemTouchHelper.attachToRecyclerView(binding.taskRecyclerView.recyclerView)
     }
 
     private fun observeTasksByCategory(): Unit {
@@ -84,6 +91,11 @@ class TaskFragment : Fragment(R.layout.fragment_task), SetTaskOnClickListener {
 
         taskViewModel.getTasksByCategory(safeargs.category)
         adapter = TaskAdapter(mTasks, this)
+        swipeHandler = object : SwipeToDeleteCallBack(requireContext()) {
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                Toast.makeText(context, "Swiped", Toast.LENGTH_SHORT).show()
+            }
+        }
 
         observeSharedViewModel()
         observeTasksByCategory()
