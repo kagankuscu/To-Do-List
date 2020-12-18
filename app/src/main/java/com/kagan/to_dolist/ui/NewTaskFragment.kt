@@ -19,10 +19,13 @@ class NewTaskFragment : Fragment(R.layout.fragment_new_task) {
     private lateinit var binding: FragmentNewTaskBinding
     private lateinit var shareViewModel: ShareViewModel
     private val safeArgs: NewTaskFragmentArgs by navArgs()
+    private lateinit var updateTask: Task
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentNewTaskBinding.bind(view)
+        binding.etTask.setText(updateTask.title)
+
         setOnclickListener()
         binding.etTask.setOnClickListener {
             binding.etTask.setBackgroundResource(R.drawable.new_task_edit_text_background)
@@ -32,6 +35,8 @@ class NewTaskFragment : Fragment(R.layout.fragment_new_task) {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         shareViewModel = ViewModelProvider(requireActivity()).get(ShareViewModel::class.java)
+        updateTask = shareViewModel.getUpdateTake().value!!
+        Log.d(TAG, "onCreate: $updateTask")
     }
 
     private fun setOnclickListener() {

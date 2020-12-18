@@ -23,9 +23,6 @@ import com.kagan.to_dolist.utils.SwipeToEditCallBack
 import com.kagan.to_dolist.viewModels.ShareViewModel
 import com.kagan.to_dolist.viewModels.TaskViewModel
 import com.kagan.to_dolist.viewModels.viewModelFactory.TaskViewModelFactory
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers.IO
-import kotlinx.coroutines.launch
 
 class TaskFragment : Fragment(R.layout.fragment_task), SetTaskOnClickListener {
 
@@ -105,22 +102,38 @@ class TaskFragment : Fragment(R.layout.fragment_task), SetTaskOnClickListener {
         swipeHandler = object : SwipeToDeleteCallBack(requireContext()) {
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                 Log.d(TAG, "onSwiped: ${mTasks[viewHolder.adapterPosition]}")
-                val task = mTasks[viewHolder.adapterPosition]
-                task.isDeleted = true
-                mTasks.removeAt(viewHolder.adapterPosition)
-                adapter.notifyItemRemoved(viewHolder.adapterPosition)
-                taskViewModel.delete(task)
-                showSnackBar(task)
+                deleteTask(viewHolder)
             }
         }
         swipeEdit = object : SwipeToEditCallBack(requireContext()) {
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                 Toast.makeText(context, "Edit", Toast.LENGTH_SHORT).show()
+                navigateToEditFragment(viewHolder)
             }
         }
         observeSharedViewModel()
         observeTasksByCategory()
 
+    }
+
+    private fun getTaskById(viewHolder: RecyclerView.ViewHolder) =
+        mTasks[viewHolder.adapterPosition]
+
+
+    private fun deleteTask(viewHolder: RecyclerView.ViewHolder) {
+        val task = getTaskById(viewHolder)
+        task.isDeleted = true
+        mTasks.removeAt(viewHolder.adapterPosition)
+        adapter.notifyItemRemoved(viewHolder.adapterPosition)
+        taskViewModel.delete(task)
+        showSnackBar(task)
+    }
+
+    private fun navigateToEditFragment(viewHolder: RecyclerView.ViewHolder) {
+        val task = getTaskById(viewHolder)
+        shareViewModel.setTaskToNew(task)
+        val action = TaskFragmentDirections.actionTaskFragmentToNewTaskFragment(safeargs.category)
+        findNavController().navigate(action)
     }
 
     override fun onItemClick(position: Int, task: Task) {
