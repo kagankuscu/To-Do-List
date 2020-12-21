@@ -1,5 +1,6 @@
 package com.kagan.to_dolist.viewModels
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -42,5 +43,10 @@ class TaskViewModel(private val repository: TaskRepository) : ViewModel() {
         repository.restore(task)
     }
 
-    fun getTaskById(itemId: Long) = repository.getTaskById(itemId)
+    suspend fun getTaskById(itemId: Long) = repository.getTaskById(itemId)
+
+    fun updateTask(addUpdateTask: Task) = viewModelScope.launch {
+        Log.d("NewTask ", "updateTask: $addUpdateTask")
+        repository.updateTask(addUpdateTask)
+    }
 }

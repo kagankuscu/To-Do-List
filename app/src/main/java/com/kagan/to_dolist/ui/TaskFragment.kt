@@ -71,6 +71,8 @@ class TaskFragment : Fragment(R.layout.fragment_task), SetTaskOnClickListener {
                 } else {
                     binding.taskRecyclerView.showEmptyView()
                 }
+            } else {
+                adapter.notifyDataSetChanged()
             }
         })
     }
@@ -85,7 +87,11 @@ class TaskFragment : Fragment(R.layout.fragment_task), SetTaskOnClickListener {
     }
 
     private fun navigateToAddTask() {
-        val action = TaskFragmentDirections.actionTaskFragmentToNewTaskFragment(safeargs.category)
+        val action = TaskFragmentDirections.actionTaskFragmentToNewTaskFragment(
+            getString(R.string.add_task),
+            0L,
+            safeargs.category
+        )
         findNavController().navigate(action)
     }
 
@@ -131,8 +137,11 @@ class TaskFragment : Fragment(R.layout.fragment_task), SetTaskOnClickListener {
 
     private fun navigateToEditFragment(viewHolder: RecyclerView.ViewHolder) {
         val task = getTaskById(viewHolder)
-        shareViewModel.setTaskToNew(task)
-        val action = TaskFragmentDirections.actionTaskFragmentToNewTaskFragment(safeargs.category)
+        val action = TaskFragmentDirections.actionTaskFragmentToNewTaskFragment(
+            getString(R.string.edit_task),
+            task.id,
+            safeargs.category
+        )
         findNavController().navigate(action)
     }
 
@@ -154,8 +163,15 @@ class TaskFragment : Fragment(R.layout.fragment_task), SetTaskOnClickListener {
             Snackbar.LENGTH_SHORT
         )
             .setAction("Restore", View.OnClickListener {
-                task.isDeleted = false
-                taskViewModel.restore(task)
+                val restore = Task(
+                    task.id,
+                    task.title,
+                    task.categoryType,
+                    task.dueDateTime,
+                    task.isCompleted,
+                    false
+                )
+                taskViewModel.restore(restore)
             })
             .show()
     }

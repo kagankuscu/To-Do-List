@@ -30,5 +30,8 @@ interface TaskDao {
     suspend fun restore(task: Task)
 
     @Query(value = "SELECT * FROM task_table WHERE id=:itemId")
-    fun getTaskById(itemId: Long): Task
+    suspend fun getTaskById(itemId: Long): Task
+
+    @Update
+    suspend fun updateTask(addUpdateTask: Task)
 }

@@ -10,23 +10,6 @@
         android:layout_height="wrap_content"
         android:background="@color/background">
 
-        <TextView
-            android:id="@+id/tvNewTask"
-            android:layout_width="match_parent"
-            android:layout_height="75dp"
-            android:layout_margin="16dp"
-            android:autoSizeMaxTextSize="56sp"
-            android:autoSizeMinTextSize="22sp"
-            android:autoSizeTextType="uniform"
-            android:paddingStart="16dp"
-            android:paddingEnd="16dp"
-            android:text="@string/new_task"
-            android:textColor="@color/dark_blue"
-            app:layout_constraintBottom_toTopOf="@+id/etTask"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
         <EditText
             android:id="@+id/etTask"
             android:layout_width="match_parent"
@@ -43,7 +26,7 @@
             app:layout_constraintBottom_toTopOf="@+id/tvTimeError"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tvNewTask" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/tvTimeError"
