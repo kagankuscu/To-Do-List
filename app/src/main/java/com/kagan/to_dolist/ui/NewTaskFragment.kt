@@ -1,8 +1,11 @@
 package com.kagan.to_dolist.ui
 
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.view.inputmethod.InputMethodManager
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -19,7 +22,6 @@ import com.kagan.to_dolist.viewModels.viewModelFactory.TaskViewModelFactory
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.Dispatchers.Main
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
@@ -92,11 +94,11 @@ class NewTaskFragment : Fragment(R.layout.fragment_new_task) {
                 Log.d(TAG, "setOnclickListener: $isEmpty")
                 if (safeArgs.taskId == 0L) {
                     addUpdateTask()
-                    navigateBackToTaskFragment()
                 } else {
                     addUpdateTask(safeArgs.taskId)
-                    navigateBackToTaskFragment()
                 }
+                hideTheKeyboard()
+                navigateBackToTaskFragment()
             }
         }
     }
@@ -120,5 +122,10 @@ class NewTaskFragment : Fragment(R.layout.fragment_new_task) {
             val updatedTask: Task = Task(taskId, title, category, dateLong)
             taskViewModel.updateTask(updatedTask)
         }
+    }
+
+    private fun hideTheKeyboard() {
+        val imm = context?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.hideSoftInputFromWindow(view?.windowToken, 0)
     }
 }
