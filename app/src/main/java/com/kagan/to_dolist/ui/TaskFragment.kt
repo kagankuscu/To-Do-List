@@ -60,7 +60,7 @@ class TaskFragment : Fragment(R.layout.fragment_task), SetTaskOnClickListener {
 
     private fun observeTasksByCategory(): Unit {
         taskViewModel.getTasksByCategory(safeargs.category).observe(this, {
-            Log.d(TAG, "-----------------------------------------------")
+            val oldSize = mTasks.size
             mTasks.clear()
             mTasks.addAll(it)
             if (oldSize < mTasks.size) {
