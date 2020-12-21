@@ -42,4 +42,7 @@
     <string name="how_many_task">%d Task</string>
     <string name="Category">Category</string>
     <string name="edit_task">Edit Task</string>
+    <string name="filter_all">All</string>
+    <string name="filter_completed">Completed</string>
+    <string name="filter_uncompleted">UnCompleted</string>
 </resources>

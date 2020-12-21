@@ -2,6 +2,9 @@ package com.kagan.to_dolist.ui
 
 import android.os.Bundle
 import android.util.Log
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
 import androidx.fragment.app.Fragment
@@ -120,6 +123,7 @@ class TaskFragment : Fragment(R.layout.fragment_task), SetTaskOnClickListener {
         }
         observeSharedViewModel()
         observeTasksByCategory()
+        setHasOptionsMenu(true)
 
     }
 
@@ -173,5 +177,20 @@ class TaskFragment : Fragment(R.layout.fragment_task), SetTaskOnClickListener {
                 taskViewModel.restore(restore)
             })
             .show()
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        val inflate: MenuInflater = inflater
+        inflate.inflate(R.menu.menu_filter, menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.filter_all -> Log.d(TAG, "onOptionsItemSelected: filter all")
+            R.id.filter_completed -> Log.d(TAG, "onOptionsItemSelected: filter completed")
+            R.id.filter_uncompleted -> Log.d(TAG, "onOptionsItemSelected: filter uncompleted")
+            else -> super.onOptionsItemSelected(item)
+        }
+        return true
     }
 }
