@@ -23,4 +23,14 @@ class TaskRepository(private val db: TaskDB) {
     suspend fun save(task: Task) {
         db.getTaskDao().upsert(task)
     }
+
+    suspend fun completed(task: Task) = db.getTaskDao().completed(task)
+
+    suspend fun delete(task: Task) = db.getTaskDao().deleted(task)
+
+    suspend fun restore(task: Task) = db.getTaskDao().restore(task)
+
+    suspend fun getTaskById(itemId: Long) = db.getTaskDao().getTaskById(itemId)
+
+    suspend fun updateTask(addUpdateTask: Task) = db.getTaskDao().updateTask(addUpdateTask)
 }

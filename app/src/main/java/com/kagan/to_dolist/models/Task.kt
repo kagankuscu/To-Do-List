@@ -6,11 +6,11 @@ import com.kagan.to_dolist.enums.CategoryType
 
 @Entity(tableName = "task_table")
 data class Task(
+    @PrimaryKey(autoGenerate = true)
+    var id: Long,
     val title: String,
     val categoryType: CategoryType,
     val dueDateTime: Long = 0,
-    val isDeleted: Boolean = false
-) {
-    @PrimaryKey(autoGenerate = true)
-    var id: Long = 0L
-}
+    var isCompleted: Boolean = false,
+    var isDeleted: Boolean = false
+)

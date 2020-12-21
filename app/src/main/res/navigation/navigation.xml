@@ -7,7 +7,7 @@
     <fragment
         android:id="@+id/todoListFragment"
         android:name="com.kagan.to_dolist.ui.CategoryFragment"
-        android:label="TodoListFragment" >
+        android:label="TodoListFragment">
         <action
             android:id="@+id/action_todoListFragment_to_taskFragment"
             app:destination="@id/taskFragment" />
@@ -19,7 +19,7 @@
         android:id="@+id/taskFragment"
         android:name="com.kagan.to_dolist.ui.TaskFragment"
         android:label="TodoListFragment"
-        tools:layout="@layout/fragment_task" >
+        tools:layout="@layout/fragment_task">
         <argument
             android:name="category"
             app:argType="com.kagan.to_dolist.enums.CategoryType" />
@@ -30,7 +30,14 @@
     <fragment
         android:id="@+id/newTaskFragment"
         android:name="com.kagan.to_dolist.ui.NewTaskFragment"
-        android:label="TodoListFragment" >
+        android:label="{title}">
+        <argument
+            android:name="title"
+            app:argType="string"
+            app:nullable="false" />
+        <argument
+            android:name="taskId"
+            app:argType="long"/>
         <argument
             android:name="category"
             app:argType="com.kagan.to_dolist.enums.CategoryType" />
@@ -38,7 +45,7 @@
     <fragment
         android:id="@+id/onBoardFragment"
         android:name="com.kagan.to_dolist.ui.OnBoardFragment"
-        android:label="OnBoardFragment" >
+        android:label="OnBoardFragment">
         <action
             android:id="@+id/action_onBoardFragment_to_todoListFragment"
             app:destination="@id/todoListFragment" />

@@ -10,19 +10,44 @@ import androidx.navigation.fragment.navArgs
 import com.kagan.to_dolist.R
 import com.kagan.to_dolist.constants.SimpleDateFormat
 import com.kagan.to_dolist.databinding.FragmentNewTaskBinding
+import com.kagan.to_dolist.db.TaskDB
 import com.kagan.to_dolist.models.Task
+import com.kagan.to_dolist.repositories.TaskRepository
 import com.kagan.to_dolist.viewModels.ShareViewModel
+import com.kagan.to_dolist.viewModels.TaskViewModel
+import com.kagan.to_dolist.viewModels.viewModelFactory.TaskViewModelFactory
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers.IO
+import kotlinx.coroutines.Dispatchers.Main
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class NewTaskFragment : Fragment(R.layout.fragment_new_task) {
 
     private val TAG = "NewTaskFragment"
     private lateinit var binding: FragmentNewTaskBinding
     private lateinit var shareViewModel: ShareViewModel
+    private lateinit var db: TaskDB
+    private lateinit var repository: TaskRepository
+    private lateinit var taskViewModel: TaskViewModel
+    private lateinit var taskViewModelFactory: TaskViewModelFactory
     private val safeArgs: NewTaskFragmentArgs by navArgs()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentNewTaskBinding.bind(view)
+        if (safeArgs.taskId != 0L) {
+            CoroutineScope(IO).launch {
+                val task = taskViewModel.getTaskById(safeArgs.taskId)
+
+                withContext(Main) {
+                    binding.etTask.setText(task.title)
+                    binding.tvChooseDateShow.text = SimpleDateFormat.formatTime(task.dueDateTime)
+                }
+            }
+        }
+
         setOnclickListener()
         binding.etTask.setOnClickListener {
             binding.etTask.setBackgroundResource(R.drawable.new_task_edit_text_background)
@@ -32,6 +57,10 @@ class NewTaskFragment : Fragment(R.layout.fragment_new_task) {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         shareViewModel = ViewModelProvider(requireActivity()).get(ShareViewModel::class.java)
+        db = TaskDB(requireContext())
+        repository = TaskRepository(db)
+        taskViewModelFactory = TaskViewModelFactory(repository)
+        taskViewModel = ViewModelProvider(this, taskViewModelFactory).get(TaskViewModel::class.java)
     }
 
     private fun setOnclickListener() {
@@ -60,8 +89,14 @@ class NewTaskFragment : Fragment(R.layout.fragment_new_task) {
             }
 
             if (!isEmpty) {
-                shareViewModel.setTask(addTask())
-                navigateBackToTaskFragment()
+                Log.d(TAG, "setOnclickListener: $isEmpty")
+                if (safeArgs.taskId == 0L) {
+                    addUpdateTask()
+                    navigateBackToTaskFragment()
+                } else {
+                    addUpdateTask(safeArgs.taskId)
+                    navigateBackToTaskFragment()
+                }
             }
         }
     }
@@ -70,12 +105,20 @@ class NewTaskFragment : Fragment(R.layout.fragment_new_task) {
         findNavController().navigateUp()
     }
 
-    private fun addTask(): Task {
+    private fun addUpdateTask(taskId: Long? = null) {
+        var addTask: Task? = null
+
         val title = binding.etTask.text.toString()
         val date = binding.tvChooseDateShow.text.toString()
         val dateLong = System.currentTimeMillis()
         val category = safeArgs.category
 
-        return Task(title, category, dateLong)
+        if (taskId == null) {
+            addTask = Task(0, title, category, dateLong)
+            taskViewModel.saveTask(addTask)
+        } else {
+            val updatedTask: Task = Task(taskId, title, category, dateLong)
+            taskViewModel.updateTask(updatedTask)
+        }
     }
 }
