@@ -60,13 +60,14 @@ class TaskFragment : Fragment(R.layout.fragment_task), SetTaskOnClickListener {
 
     private fun observeTasksByCategory(): Unit {
         taskViewModel.getTasksByCategory(safeargs.category).observe(this, {
-            val oldSize = mTasks.size
+            Log.d(TAG, "-----------------------------------------------")
             mTasks.clear()
             mTasks.addAll(it)
-            if (oldSize != mTasks.size) {
+            if (oldSize < mTasks.size) {
                 binding.taskRecyclerView.recyclerView.scrollToPosition(mTasks.size - 1)
                 if (it.isNotEmpty()) {
-                    adapter.notifyItemInserted(mTasks.size - 1)
+                    adapter.notifyDataSetChanged()
+//                    adapter.notifyItemInserted(mTasks.size - 1)
                     binding.taskRecyclerView.hideEmptyView()
                 } else {
                     binding.taskRecyclerView.showEmptyView()
@@ -129,8 +130,6 @@ class TaskFragment : Fragment(R.layout.fragment_task), SetTaskOnClickListener {
     private fun deleteTask(viewHolder: RecyclerView.ViewHolder) {
         val task = getTaskById(viewHolder)
         task.isDeleted = true
-        mTasks.removeAt(viewHolder.adapterPosition)
-        adapter.notifyItemRemoved(viewHolder.adapterPosition)
         taskViewModel.delete(task)
         showSnackBar(task)
     }
