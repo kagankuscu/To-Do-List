@@ -28,7 +28,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/task_radio_cv_margin_start"
                 android:contentDescription="@string/check"
-                android:src="@drawable/ic_radio_button_unchecked"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />

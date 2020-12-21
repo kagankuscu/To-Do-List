@@ -1,5 +1,8 @@
 package com.kagan.to_dolist.adapters
 
+import android.content.res.ColorStateList
+import android.graphics.Color
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -30,7 +33,7 @@ class TaskAdapter(
         var ivCheck: ImageView = view.findViewById(R.id.ivCheck)
 
         init {
-            cardView.setOnClickListener {
+            ivCheck.setOnClickListener {
                 val position = adapterPosition
                 listener.onItemClick(position, tasks[position])
             }
@@ -46,13 +49,16 @@ class TaskAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.apply {
+            val isCheck = tasks[position].isCompleted
             ivCategoryColor.setImageResource(setImage(position))
             tvTime.text = formatTime(tasks[position].dueDateTime)
             tvTaskDesc.text = tasks[position].title
 
-            if (tasks[position].isCompleted) {
+            ivCheck.setImageResource(R.drawable.ic_radio_button_unchecked)
+            if (isCheck) {
                 ivCheck.setImageResource(R.drawable.ic_checked_circle)
             }
+
         }
     }
 
