@@ -22,6 +22,11 @@ class TaskViewModel(private val repository: TaskRepository) : ViewModel() {
         return repository.getAllTaskByCategory(categoryType)
     }
 
+    fun getCompletedTasks(categoryType: CategoryType) = repository.getCompletedTasks(categoryType)
+
+    fun getUnCompletedTasks(categoryType: CategoryType) =
+        repository.getUnCompletedTasks(categoryType)
+
     suspend fun getTotalTaskByCategory(categoryType: CategoryType) =
         repository.getTotalTaskByCategory(categoryType)
 

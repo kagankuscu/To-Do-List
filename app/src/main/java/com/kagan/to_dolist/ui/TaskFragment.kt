@@ -7,6 +7,7 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -38,7 +39,7 @@ class TaskFragment : Fragment(R.layout.fragment_task), SetTaskOnClickListener {
     private lateinit var taskViewModel: TaskViewModel
     private lateinit var taskViewModelFactory: TaskViewModelFactory
     private lateinit var adapter: TaskAdapter
-    private val mTasks = ArrayList<Task>()
+    private var mTasks = ArrayList<Task>()
     private lateinit var swipeHandler: SwipeToDeleteCallBack
     private lateinit var swipeEdit: SwipeToEditCallBack
 
@@ -63,6 +64,7 @@ class TaskFragment : Fragment(R.layout.fragment_task), SetTaskOnClickListener {
 
     private fun observeTasksByCategory(): Unit {
         taskViewModel.getTasksByCategory(safeargs.category).observe(this, {
+            Log.d(TAG, "observeTasksByCategory: first observe")
             val oldSize = mTasks.size
             mTasks.clear()
             mTasks.addAll(it)
@@ -87,6 +89,30 @@ class TaskFragment : Fragment(R.layout.fragment_task), SetTaskOnClickListener {
                 taskViewModel.saveTask(it)
                 shareViewModel.clear()
             }
+        })
+    }
+
+    private fun observeTasksCompleted() {
+        taskViewModel.getCompletedTasks(safeargs.category).observe(this, {
+            Log.d(TAG, "Completed observe function ")
+            mTasks.clear()
+            adapter.notifyDataSetChanged()
+            Log.d(TAG, "mTasks: ${mTasks.size}")
+            Log.d(TAG, "onOptionsItemSelected: ${it.size}")
+            mTasks.addAll(it)
+            Log.d(TAG, "mTask: ${mTasks.size}")
+        })
+    }
+
+    private fun observeTasksUnCompleted() {
+        taskViewModel.getUnCompletedTasks(safeargs.category).observe(this, {
+            Log.d(TAG, "UnCompleted observe function ")
+            mTasks.clear()
+            adapter.notifyDataSetChanged()
+            Log.d(TAG, "mTasks: ${mTasks.size}")
+            Log.d(TAG, "onOptionsItemSelected: ${it.size}")
+            mTasks.addAll(it)
+            Log.d(TAG, "mTask: ${mTasks.size}")
         })
     }
 
@@ -186,9 +212,15 @@ class TaskFragment : Fragment(R.layout.fragment_task), SetTaskOnClickListener {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.filter_all -> Log.d(TAG, "onOptionsItemSelected: filter all")
-            R.id.filter_completed -> Log.d(TAG, "onOptionsItemSelected: filter completed")
-            R.id.filter_uncompleted -> Log.d(TAG, "onOptionsItemSelected: filter uncompleted")
+            R.id.filter_all -> {
+//                observeTasksByCategory()
+            }
+            R.id.filter_completed -> {
+//                observeTasksCompleted()
+            }
+            R.id.filter_uncompleted -> {
+//                observeTasksUnCompleted()
+            }
             else -> super.onOptionsItemSelected(item)
         }
         return true

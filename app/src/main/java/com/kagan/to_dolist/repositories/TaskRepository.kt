@@ -17,6 +17,12 @@ class TaskRepository(private val db: TaskDB) {
         return db.getTaskDao().getAllTaskByCategory(categoryType)
     }
 
+    fun getCompletedTasks(categoryType: CategoryType) =
+        db.getTaskDao().getCompletedTasks(categoryType)
+
+    fun getUnCompletedTasks(categoryType: CategoryType) =
+        db.getTaskDao().getUnCompletedTasks(categoryType)
+
     suspend fun getTotalTaskByCategory(categoryType: CategoryType) =
         db.getTaskDao().getTotalTaskByCategory(categoryType)
 

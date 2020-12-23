@@ -21,10 +21,10 @@ interface TaskDao {
     fun getAllTaskByCategory(categoryType: CategoryType): LiveData<List<Task>>
 
     @Query(value = "SELECT * FROM task_table WHERE categoryType=:categoryType AND isCompleted=1 AND isDeleted=0")
-    fun getCompletedTasks(categoryType: CategoryType): LiveData<Task>
+    fun getCompletedTasks(categoryType: CategoryType): LiveData<List<Task>>
 
     @Query(value = "SELECT * FROM task_table WHERE categoryType=:categoryType AND isCompleted=0 AND isDeleted=0")
-    fun getUnCompletedTasks(categoryType: CategoryType): LiveData<Task>
+    fun getUnCompletedTasks(categoryType: CategoryType): LiveData<List<Task>>
 
     @Query(value = "SELECT COUNT(id) from task_table WHERE categoryType=:categoryType AND isDeleted=0")
     suspend fun getTotalTaskByCategory(categoryType: CategoryType): Int
