@@ -1,5 +1,6 @@
 package com.kagan.to_dolist.ui
 
+import android.content.DialogInterface
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
@@ -7,6 +8,7 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -14,6 +16,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import com.kagan.to_dolist.R
 import com.kagan.to_dolist.adapters.TaskAdapter
@@ -198,8 +201,24 @@ class TaskFragment : Fragment(R.layout.fragment_task), SetTaskOnClickListener {
             R.id.filter_uncompleted -> {
                 taskViewModel.setFiltering("UNCOMPLETED_TASK", safeargs.category)
             }
-            else -> super.onOptionsItemSelected(item)
+            R.id.btn_delete -> showDialogDelete()
+            else -> findNavController().navigateUp()
         }
         return true
+    }
+
+    private fun showDialogDelete() {
+        MaterialAlertDialogBuilder(requireContext())
+            .setTitle(getString(R.string.delete))
+            .setMessage(getString(R.string.do_you_want_to_delete_the_task))
+            .setPositiveButton(
+                getString(R.string.positive_btn_yes),
+                DialogInterface.OnClickListener { _, _ ->
+                    Toast.makeText(context, "del", Toast.LENGTH_SHORT).show()
+                })
+            .setNegativeButton(
+                getString(R.string.negative_btn_no),
+                DialogInterface.OnClickListener { _, _ -> })
+            .show()
     }
 }
