@@ -176,12 +176,6 @@ class CategoryFragment : Fragment(R.layout.fragment_category) {
             }
         }
 
-
-        Log.d(
-            TAG, "onCreate: ${
-                shareViewModel.getCategoryDelete().values
-            }"
-        )
         shareViewModel.clearCategoryDelete()
     }
 }
