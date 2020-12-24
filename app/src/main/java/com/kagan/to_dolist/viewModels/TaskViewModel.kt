@@ -101,4 +101,8 @@ class TaskViewModel(private val repository: TaskRepository) : ViewModel() {
 
         loadTasks(categoryType)
     }
+
+    fun deleteAllTaskByCategory(categoryType: CategoryType) = viewModelScope.launch {
+        repository.deleteAllTaskByCategory(categoryType)
+    }
 }

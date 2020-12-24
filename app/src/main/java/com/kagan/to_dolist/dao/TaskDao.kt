@@ -40,4 +40,7 @@ interface TaskDao {
 
     @Update
     suspend fun updateTask(addUpdateTask: Task)
+
+    @Query(value = "UPDATE task_table SET isDeleted=1 WHERE categoryType=:categoryType")
+    suspend fun deleteAllTaskByCategory(categoryType: CategoryType)
 }

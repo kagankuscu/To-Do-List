@@ -39,4 +39,6 @@ class TaskRepository(private val db: TaskDB) {
     suspend fun getTaskById(itemId: Long) = db.getTaskDao().getTaskById(itemId)
 
     suspend fun updateTask(addUpdateTask: Task) = db.getTaskDao().updateTask(addUpdateTask)
+
+    suspend fun deleteAllTaskByCategory(categoryType: CategoryType)= db.getTaskDao().deleteAllTaskByCategory(categoryType)
 }

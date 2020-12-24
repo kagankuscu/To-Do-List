@@ -221,18 +221,21 @@ class TaskFragment : Fragment(R.layout.fragment_task), SetTaskOnClickListener {
     }
 
     private fun deleteAndNavigateUp() {
-        shareViewModel.setCategoryDelete(safeargs.category,true)
+        shareViewModel.setCategoryDelete(safeargs.category, true)
         findNavController().navigateUp()
     }
 
     private fun positiveButtonListener(): DialogInterface.OnClickListener {
 
         return DialogInterface.OnClickListener { _, _ ->
+            taskViewModel.deleteAllTaskByCategory(safeargs.category)
             deleteAndNavigateUp()
         }
     }
 
     private fun negativeButtonListener(): DialogInterface.OnClickListener {
-        return DialogInterface.OnClickListener { _, _ -> }
+        return DialogInterface.OnClickListener { _, _ ->
+            deleteAndNavigateUp()
+        }
     }
 }
