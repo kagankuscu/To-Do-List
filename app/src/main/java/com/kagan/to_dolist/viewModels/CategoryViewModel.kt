@@ -1,7 +1,7 @@
 package com.kagan.to_dolist.viewModels
 
-import android.util.Log
 import androidx.lifecycle.*
+import com.kagan.to_dolist.enums.CategoryType
 import com.kagan.to_dolist.models.Category
 import com.kagan.to_dolist.repositories.CategoryRepository
 import kotlinx.coroutines.Dispatchers.IO
@@ -17,5 +17,9 @@ class CategoryViewModel(private val repository: CategoryRepository) : ViewModel(
         }
 
     fun getCategory() = repository.getCategory()
+
+    fun delete(categoryType: CategoryType) = viewModelScope.launch {
+        repository.delete(categoryType)
+    }
 
 }

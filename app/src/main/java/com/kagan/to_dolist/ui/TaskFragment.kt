@@ -1,7 +1,11 @@
 package com.kagan.to_dolist.ui
 
+import android.content.DialogInterface
 import android.os.Bundle
 import android.util.Log
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
 import androidx.fragment.app.Fragment
@@ -10,6 +14,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import com.kagan.to_dolist.R
 import com.kagan.to_dolist.adapters.TaskAdapter
@@ -35,7 +40,7 @@ class TaskFragment : Fragment(R.layout.fragment_task), SetTaskOnClickListener {
     private lateinit var taskViewModel: TaskViewModel
     private lateinit var taskViewModelFactory: TaskViewModelFactory
     private lateinit var adapter: TaskAdapter
-    private val mTasks = ArrayList<Task>()
+    private var mTasks = ArrayList<Task>()
     private lateinit var swipeHandler: SwipeToDeleteCallBack
     private lateinit var swipeEdit: SwipeToEditCallBack
 
@@ -59,7 +64,10 @@ class TaskFragment : Fragment(R.layout.fragment_task), SetTaskOnClickListener {
     }
 
     private fun observeTasksByCategory(): Unit {
-        taskViewModel.getTasksByCategory(safeargs.category).observe(this, {
+        taskViewModel.loadTasks(safeargs.category)
+
+        taskViewModel.items.observe(this, {
+            Log.d(TAG, "onViewCreated: ${it.size}")
             val oldSize = mTasks.size
             mTasks.clear()
             mTasks.addAll(it)
@@ -67,7 +75,6 @@ class TaskFragment : Fragment(R.layout.fragment_task), SetTaskOnClickListener {
                 binding.taskRecyclerView.recyclerView.scrollToPosition(mTasks.size - 1)
                 if (it.isNotEmpty()) {
                     adapter.notifyDataSetChanged()
-//                    adapter.notifyItemInserted(mTasks.size - 1)
                     binding.taskRecyclerView.hideEmptyView()
                 } else {
                     binding.taskRecyclerView.showEmptyView()
@@ -120,6 +127,7 @@ class TaskFragment : Fragment(R.layout.fragment_task), SetTaskOnClickListener {
         }
         observeSharedViewModel()
         observeTasksByCategory()
+        setHasOptionsMenu(true)
 
     }
 
@@ -173,5 +181,61 @@ class TaskFragment : Fragment(R.layout.fragment_task), SetTaskOnClickListener {
                 taskViewModel.restore(restore)
             })
             .show()
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        val inflate: MenuInflater = inflater
+        inflate.inflate(R.menu.menu_filter, menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.filter_all -> {
+                taskViewModel.setFiltering("ALL_TASK", safeargs.category)
+            }
+            R.id.filter_completed -> {
+                taskViewModel.setFiltering("COMPLETED_TASK", safeargs.category)
+            }
+            R.id.filter_uncompleted -> {
+                taskViewModel.setFiltering("UNCOMPLETED_TASK", safeargs.category)
+            }
+            R.id.btn_delete -> showDialogDelete()
+            else -> findNavController().navigateUp()
+        }
+        return true
+    }
+
+    private fun showDialogDelete() {
+        MaterialAlertDialogBuilder(requireContext())
+            .setTitle(getString(R.string.delete))
+            .setMessage(getString(R.string.do_you_want_to_delete_the_task))
+            .setPositiveButton(
+                getString(R.string.positive_btn_yes),
+                positiveButtonListener()
+            )
+            .setNegativeButton(
+                getString(R.string.negative_btn_no),
+                negativeButtonListener()
+            )
+            .show()
+    }
+
+    private fun deleteAndNavigateUp() {
+        shareViewModel.setCategoryDelete(safeargs.category, true)
+        findNavController().navigateUp()
+    }
+
+    private fun positiveButtonListener(): DialogInterface.OnClickListener {
+
+        return DialogInterface.OnClickListener { _, _ ->
+            taskViewModel.deleteAllTaskByCategory(safeargs.category)
+            deleteAndNavigateUp()
+        }
+    }
+
+    private fun negativeButtonListener(): DialogInterface.OnClickListener {
+        return DialogInterface.OnClickListener { _, _ ->
+            deleteAndNavigateUp()
+        }
     }
 }
