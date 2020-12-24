@@ -68,6 +68,9 @@ class TaskFragment : Fragment(R.layout.fragment_task), SetTaskOnClickListener {
 
         taskViewModel.items.observe(this, {
             Log.d(TAG, "onViewCreated: ${it.size}")
+            if (it.isEmpty()){
+                binding.taskRecyclerView.showEmptyView()
+            }
             val oldSize = mTasks.size
             mTasks.clear()
             mTasks.addAll(it)
