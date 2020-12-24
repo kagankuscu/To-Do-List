@@ -46,7 +46,6 @@
     <string name="filter_completed">Completed</string>
     <string name="filter_uncompleted">UnCompleted</string>
     <string name="delete">Delete</string>
-    <string name="delete">Delete</string>
     <string name="do_you_want_to_delete_the_task">Do you want delete the tasks?</string>
     <string name="positive_btn_yes">Yes</string>
     <string name="negative_btn_no">No</string>

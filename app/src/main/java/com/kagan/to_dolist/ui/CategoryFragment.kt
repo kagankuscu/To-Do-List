@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.GridLayoutManager
+import com.google.android.material.snackbar.Snackbar
 import com.kagan.to_dolist.R
 import com.kagan.to_dolist.adapters.CategoryAdapter
 import com.kagan.to_dolist.constants.Constant.MEETING
@@ -25,6 +26,7 @@ import com.kagan.to_dolist.models.CategoryTaskCount
 import com.kagan.to_dolist.repositories.CategoryRepository
 import com.kagan.to_dolist.repositories.TaskRepository
 import com.kagan.to_dolist.viewModels.CategoryViewModel
+import com.kagan.to_dolist.viewModels.ShareViewModel
 import com.kagan.to_dolist.viewModels.TaskViewModel
 import com.kagan.to_dolist.viewModels.viewModelFactory.CategoryViewModelFactory
 import com.kagan.to_dolist.viewModels.viewModelFactory.TaskViewModelFactory
@@ -49,6 +51,7 @@ class CategoryFragment : Fragment(R.layout.fragment_category) {
     private lateinit var adapter: CategoryAdapter
     private lateinit var categoriesTaskCount: ArrayList<CategoryTaskCount>
     private val args: CategoryFragmentArgs by navArgs()
+    private lateinit var shareViewModel: ShareViewModel
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -74,6 +77,8 @@ class CategoryFragment : Fragment(R.layout.fragment_category) {
         })
         binding.rvCategory.recyclerView.layoutManager = GridLayoutManager(context, 2)
         binding.rvCategory.recyclerView.adapter = adapter
+
+        deleteCategory()
     }
 
     private fun addView() {
@@ -152,5 +157,31 @@ class CategoryFragment : Fragment(R.layout.fragment_category) {
         categoriesTaskCount = arrayListOf()
         adapter = CategoryAdapter(categoriesTaskCount)
 
+        shareViewModel = ViewModelProvider(requireActivity()).get(ShareViewModel::class.java)
+
+    }
+
+    private fun deleteCategory() {
+
+        val keys = shareViewModel.getCategoryDelete().keys
+        for (key in keys) {
+            if (shareViewModel.getCategoryDelete()[key] == true) {
+                Snackbar.make(requireView(), "DEleted", Snackbar.LENGTH_SHORT).show()
+                categoriesTaskCount.forEach {
+                    if (key == it.categoryType) {
+                        Log.d(TAG, "deleteCategory: true")
+                        categoryViewModel.delete(key)
+                    }
+                }
+            }
+        }
+
+
+        Log.d(
+            TAG, "onCreate: ${
+                shareViewModel.getCategoryDelete().values
+            }"
+        )
+        shareViewModel.clearCategoryDelete()
     }
 }

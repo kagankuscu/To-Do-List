@@ -8,8 +8,6 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -213,12 +211,28 @@ class TaskFragment : Fragment(R.layout.fragment_task), SetTaskOnClickListener {
             .setMessage(getString(R.string.do_you_want_to_delete_the_task))
             .setPositiveButton(
                 getString(R.string.positive_btn_yes),
-                DialogInterface.OnClickListener { _, _ ->
-                    Toast.makeText(context, "del", Toast.LENGTH_SHORT).show()
-                })
+                positiveButtonListener()
+            )
             .setNegativeButton(
                 getString(R.string.negative_btn_no),
-                DialogInterface.OnClickListener { _, _ -> })
+                negativeButtonListener()
+            )
             .show()
+    }
+
+    private fun deleteAndNavigateUp() {
+        shareViewModel.setCategoryDelete(safeargs.category,true)
+        findNavController().navigateUp()
+    }
+
+    private fun positiveButtonListener(): DialogInterface.OnClickListener {
+
+        return DialogInterface.OnClickListener { _, _ ->
+            deleteAndNavigateUp()
+        }
+    }
+
+    private fun negativeButtonListener(): DialogInterface.OnClickListener {
+        return DialogInterface.OnClickListener { _, _ -> }
     }
 }
