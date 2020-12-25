@@ -12,33 +12,46 @@
         android:contentDescription="@string/dashboard"
         android:orientation="horizontal"
         android:src="@drawable/dashboard_background"
+        app:layout_constraintBottom_toTopOf="@+id/rvCategory"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1" />
 
     <TextView
         android:id="@+id/tvWelcome"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/dashboard_hello_margin_top"
         android:text="@string/hello"
         android:textColor="@color/white"
         android:textSize="@dimen/hello_text_size"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/tvName"
         app:layout_constraintStart_toStartOf="@id/guidelineProjectStart"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.3"
+        app:layout_constraintVertical_chainStyle="packed" />
 
     <TextView
         android:id="@+id/tvName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/dashboard_name_margin_top"
-        android:text="Name"
+        android:text="@string/tasks_have"
         android:textColor="@color/white"
         android:textSize="@dimen/name_text_size"
-        app:layout_constraintEnd_toEndOf="@+id/tvWelcome"
+        app:layout_constraintBottom_toTopOf="@id/tvProject"
         app:layout_constraintStart_toStartOf="@+id/tvWelcome"
         app:layout_constraintTop_toBottomOf="@+id/tvWelcome" />
+
+    <ImageView
+        android:id="@+id/ivUserImage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="@string/app_name"
+        app:layout_constraintBottom_toBottomOf="@+id/tvName"
+        app:layout_constraintEnd_toEndOf="@+id/guidelineProjectEnd"
+        app:layout_constraintTop_toTopOf="@+id/tvWelcome"
+        app:srcCompat="@drawable/ic_personal" />
 
     <TextView
         android:id="@+id/tvProject"
@@ -48,6 +61,7 @@
         android:text="@string/projects"
         android:textColor="@color/project_text"
         android:textSize="@dimen/project_text_size"
+        app:layout_constraintBottom_toTopOf="@+id/rvCategory"
         app:layout_constraintStart_toStartOf="@+id/guidelineProjectStart"
         app:layout_constraintTop_toBottomOf="@+id/dashboard" />
 

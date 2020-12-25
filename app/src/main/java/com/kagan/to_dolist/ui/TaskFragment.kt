@@ -49,7 +49,8 @@ class TaskFragment : Fragment(R.layout.fragment_task), SetTaskOnClickListener {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentTaskBinding.bind(view)
 
-        binding.tvName.text = safeargs.category.name
+        binding.tvWelcome.text = getString(R.string.hello, safeargs.userName)
+        binding.tvName.text = getString(R.string.tasks_have, 10)
         binding.taskRecyclerView.recyclerView.adapter = adapter
         binding.btnAdd.setOnClickListener {
             navigateToAddTask()
@@ -68,7 +69,7 @@ class TaskFragment : Fragment(R.layout.fragment_task), SetTaskOnClickListener {
 
         taskViewModel.items.observe(this, {
             Log.d(TAG, "onViewCreated: ${it.size}")
-            if (it.isEmpty()){
+            if (it.isEmpty()) {
                 binding.taskRecyclerView.showEmptyView()
             }
             val oldSize = mTasks.size

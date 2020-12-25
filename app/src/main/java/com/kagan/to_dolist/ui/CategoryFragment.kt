@@ -57,7 +57,8 @@ class CategoryFragment : Fragment(R.layout.fragment_category) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentCategoryBinding.bind(view)
 
-        binding.tvName.text = args.name
+        binding.tvWelcome.text = getString(R.string.hello, args.name)
+        binding.tvName.text = getString(R.string.tasks_have, 10)
 
         binding.btnAdd.setOnClickListener {
             addView()
