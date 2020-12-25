@@ -57,7 +57,11 @@ class CategoryAdapter(private val categories: List<CategoryTaskCount>) :
     private fun navigate(view: View, position: Int) {
         val navController = view.findNavController()
         val action =
-            CategoryFragmentDirections.actionTodoListFragmentToTaskFragment(categories[position].categoryType)
+            CategoryFragmentDirections.actionTodoListFragmentToTaskFragment(
+                categories[position].categoryType,
+                categories[position].categoryType.name,
+                "USER NAME WILL CHANGE (THIS METHOD CHANGE)"
+            )
         navController.navigate(action)
     }
 }
