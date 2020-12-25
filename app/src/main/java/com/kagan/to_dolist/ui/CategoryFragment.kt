@@ -7,6 +7,8 @@ import android.util.Log
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.GridLayoutManager
 import com.google.android.material.snackbar.Snackbar
@@ -17,6 +19,7 @@ import com.kagan.to_dolist.constants.Constant.PERSONAL
 import com.kagan.to_dolist.constants.Constant.SHOPPING
 import com.kagan.to_dolist.constants.Constant.STUDY
 import com.kagan.to_dolist.constants.Constant.WORK
+import com.kagan.to_dolist.constants.Navigate
 import com.kagan.to_dolist.databinding.FragmentCategoryBinding
 import com.kagan.to_dolist.db.CategoryDB
 import com.kagan.to_dolist.db.TaskDB
@@ -36,7 +39,7 @@ import kotlinx.coroutines.Dispatchers.Main
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
-class CategoryFragment : Fragment(R.layout.fragment_category) {
+class CategoryFragment : Fragment(R.layout.fragment_category), Navigate {
 
     private val TAG = "CategoryFragment"
     private lateinit var binding: FragmentCategoryBinding
@@ -156,7 +159,7 @@ class CategoryFragment : Fragment(R.layout.fragment_category) {
             ViewModelProvider(this, taskViewModelFactory).get(TaskViewModel::class.java)
 
         categoriesTaskCount = arrayListOf()
-        adapter = CategoryAdapter(categoriesTaskCount)
+        adapter = CategoryAdapter(categoriesTaskCount, this)
 
         shareViewModel = ViewModelProvider(requireActivity()).get(ShareViewModel::class.java)
 
@@ -178,5 +181,16 @@ class CategoryFragment : Fragment(R.layout.fragment_category) {
         }
 
         shareViewModel.clearCategoryDelete()
+    }
+
+    override fun navigate(categoryType: CategoryType, categoryName: String) {
+        val navController = findNavController()
+        val action =
+            CategoryFragmentDirections.actionTodoListFragmentToTaskFragment(
+                categoryType,
+                categoryName,
+                args.name
+            )
+        navController.navigate(action)
     }
 }
