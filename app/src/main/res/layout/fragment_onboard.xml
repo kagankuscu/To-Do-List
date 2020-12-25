@@ -12,16 +12,17 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/board"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/evName"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.4" />
+        app:layout_constraintVertical_chainStyle="packed" />
 
     <com.google.android.material.textfield.TextInputEditText
         android:id="@+id/evName"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="12dp"
         android:background="@drawable/board_ev_selector_focus"
         android:hint="@string/enter_your_name"
         android:textColor="@color/dark_blue"
@@ -45,7 +46,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imBoard" />
+        app:layout_constraintTop_toBottomOf="@+id/evName" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
