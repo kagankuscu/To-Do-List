@@ -43,4 +43,7 @@ interface TaskDao {
 
     @Query(value = "UPDATE task_table SET isDeleted=1 WHERE categoryType=:categoryType")
     suspend fun deleteAllTaskByCategory(categoryType: CategoryType)
+
+    @Query(value = "SELECT COUNT(id) FROM task_table WHERE dueDate=DATE()")
+    fun todayTasks(): LiveData<Int>
 }

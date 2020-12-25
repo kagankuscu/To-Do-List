@@ -7,7 +7,6 @@ import android.util.Log
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.GridLayoutManager
@@ -61,7 +60,7 @@ class CategoryFragment : Fragment(R.layout.fragment_category), Navigate {
         binding = FragmentCategoryBinding.bind(view)
 
         binding.tvWelcome.text = getString(R.string.hello, args.name)
-        binding.tvName.text = getString(R.string.tasks_have, 10)
+        getTodayTasks()
 
         binding.btnAdd.setOnClickListener {
             addView()
@@ -83,6 +82,12 @@ class CategoryFragment : Fragment(R.layout.fragment_category), Navigate {
         binding.rvCategory.recyclerView.adapter = adapter
 
         deleteCategory()
+    }
+
+    private fun getTodayTasks() {
+        taskViewModel.todayTasks().observe(viewLifecycleOwner, {
+            binding.tvName.text = getString(R.string.tasks_have, it)
+        })
     }
 
     private fun addView() {

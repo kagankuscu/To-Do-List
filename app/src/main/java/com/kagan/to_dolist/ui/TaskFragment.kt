@@ -50,7 +50,8 @@ class TaskFragment : Fragment(R.layout.fragment_task), SetTaskOnClickListener {
         binding = FragmentTaskBinding.bind(view)
 
         binding.tvWelcome.text = getString(R.string.hello, safeargs.userName)
-        binding.tvName.text = getString(R.string.tasks_have, 10)
+        getTodayTasks()
+
         binding.taskRecyclerView.recyclerView.adapter = adapter
         binding.btnAdd.setOnClickListener {
             navigateToAddTask()
@@ -64,11 +65,16 @@ class TaskFragment : Fragment(R.layout.fragment_task), SetTaskOnClickListener {
         itemEdit.attachToRecyclerView(binding.taskRecyclerView.recyclerView)
     }
 
+    private fun getTodayTasks() {
+        taskViewModel.todayTasks().observe(viewLifecycleOwner,  {
+            binding.tvName.text = getString(R.string.tasks_have, it)
+        })
+    }
+
     private fun observeTasksByCategory(): Unit {
         taskViewModel.loadTasks(safeargs.category)
 
         taskViewModel.items.observe(this, {
-            Log.d(TAG, "onViewCreated: ${it.size}")
             if (it.isEmpty()) {
                 binding.taskRecyclerView.showEmptyView()
             }
