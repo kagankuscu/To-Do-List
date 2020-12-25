@@ -52,4 +52,5 @@
 
     <string name="lorem">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras at augue ut magna tincidunt ornare. Pellentesque interdum lobortis finibus. Suspendisse potenti. Vestibulum vitae urna ut lacus auctor tincidunt a non odio. Aenean at augue ut nisi aliquam vehicula nec eu tellus. Donec tempus rutrum mi, ut congue augue ultricies ac. Fusce convallis finibus ipsum.</string>
     <string name="tasks_have">Today you have %d tasks</string>
+    <string name="date_time_choosen">%s %s</string>
 </resources>

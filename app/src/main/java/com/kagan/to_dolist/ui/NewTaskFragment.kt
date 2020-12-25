@@ -45,7 +45,11 @@ class NewTaskFragment : Fragment(R.layout.fragment_new_task) {
 
                 withContext(Main) {
                     binding.etTask.setText(task.title)
-                    binding.tvChooseDateShow.text = SimpleDateFormat.formatTime(task.dueDateTime)
+                    binding.tvChooseDateShow.text = getString(
+                        R.string.date_time_choosen,
+                        task.dueDate,
+                        task.dueTime
+                    )
                 }
             }
         }
@@ -69,7 +73,11 @@ class NewTaskFragment : Fragment(R.layout.fragment_new_task) {
         binding.lChooseDate.setOnClickListener {
             binding.lChooseDate.setBackgroundResource(R.drawable.new_task_edit_text_background)
             binding.tvTimeError.visibility = View.GONE
-            binding.tvChooseDateShow.text = SimpleDateFormat.formatTime(System.currentTimeMillis())
+            binding.tvChooseDateShow.text = getString(
+                R.string.date_time_choosen,
+                SimpleDateFormat.formatDate(System.currentTimeMillis()),
+                SimpleDateFormat.formatTime(System.currentTimeMillis())
+            )
         }
 
         binding.btnAddTask.setOnClickListener {
@@ -111,15 +119,16 @@ class NewTaskFragment : Fragment(R.layout.fragment_new_task) {
         var addTask: Task? = null
 
         val title = binding.etTask.text.toString()
-        val date = binding.tvChooseDateShow.text.toString()
-        val dateLong = System.currentTimeMillis()
+        val dateStr = binding.tvChooseDateShow.text.toString()
+        val date = SimpleDateFormat.formatDate(System.currentTimeMillis())
+        val time = SimpleDateFormat.formatTime(System.currentTimeMillis())
         val category = safeArgs.category
 
         if (taskId == null) {
-            addTask = Task(0, title, category, dateLong)
+            addTask = Task(0, title, category, date, time)
             taskViewModel.saveTask(addTask)
         } else {
-            val updatedTask: Task = Task(taskId, title, category, dateLong)
+            val updatedTask: Task = Task(taskId, title, category, date, time)
             taskViewModel.updateTask(updatedTask)
         }
     }

@@ -178,7 +178,8 @@ class TaskFragment : Fragment(R.layout.fragment_task), SetTaskOnClickListener {
                     task.id,
                     task.title,
                     task.categoryType,
-                    task.dueDateTime,
+                    task.dueDate,
+                    task.dueTime,
                     task.isCompleted,
                     false
                 )
