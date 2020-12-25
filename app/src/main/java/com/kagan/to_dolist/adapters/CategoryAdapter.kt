@@ -9,11 +9,15 @@ import androidx.cardview.widget.CardView
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.kagan.to_dolist.R
+import com.kagan.to_dolist.constants.Navigate
 import com.kagan.to_dolist.enums.CategoryType
 import com.kagan.to_dolist.models.CategoryTaskCount
 import com.kagan.to_dolist.ui.CategoryFragmentDirections
 
-class CategoryAdapter(private val categories: List<CategoryTaskCount>) :
+class CategoryAdapter(
+    private val categories: List<CategoryTaskCount>,
+    private val navigate: Navigate
+) :
     RecyclerView.Adapter<CategoryAdapter.ViewHolder>() {
 
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -33,7 +37,10 @@ class CategoryAdapter(private val categories: List<CategoryTaskCount>) :
     override fun onBindViewHolder(holder: CategoryAdapter.ViewHolder, position: Int) {
         holder.apply {
             cardView.setOnClickListener {
-                navigate(it, position)
+                navigate(
+                    categories[position].categoryType,
+                    categories[position].categoryType.name
+                )
             }
             imCategory.setImageResource(setImage(position))
             tvCategory.text = categories[position].categoryType.name
@@ -54,14 +61,7 @@ class CategoryAdapter(private val categories: List<CategoryTaskCount>) :
         }
     }
 
-    private fun navigate(view: View, position: Int) {
-        val navController = view.findNavController()
-        val action =
-            CategoryFragmentDirections.actionTodoListFragmentToTaskFragment(
-                categories[position].categoryType,
-                categories[position].categoryType.name,
-                "USER NAME WILL CHANGE (THIS METHOD CHANGE)"
-            )
-        navController.navigate(action)
+    private fun navigate(categoryType: CategoryType, categoryName: String) {
+        navigate.navigate(categoryType, categoryName)
     }
 }
