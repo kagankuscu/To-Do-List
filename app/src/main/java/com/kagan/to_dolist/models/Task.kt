@@ -10,7 +10,8 @@ data class Task(
     var id: Long,
     val title: String,
     val categoryType: CategoryType,
-    val dueDateTime: Long = 0,
+    val dueDate: String = "",
+    val dueTime: String = "",
     var isCompleted: Boolean = false,
     var isDeleted: Boolean = false
 )

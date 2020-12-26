@@ -51,7 +51,7 @@ class TaskAdapter(
         holder.apply {
             val isCheck = tasks[position].isCompleted
             ivCategoryColor.setImageResource(setImage(position))
-            tvTime.text = formatTime(tasks[position].dueDateTime)
+            tvTime.text = tasks[position].dueTime
             tvTaskDesc.text = tasks[position].title
 
             ivCheck.setImageResource(R.drawable.ic_radio_button_unchecked)

@@ -14,7 +14,6 @@ class TaskViewModel(private val repository: TaskRepository) : ViewModel() {
     private val TAG = "TaskViewModel"
 
     private var currentFiltering = "ALL_TASK"
-
     private val _category = MutableLiveData<CategoryType>()
     private val _items: LiveData<List<Task>> = _category.switchMap { category ->
         repository.getAllTaskByCategory(category).switchMap {
@@ -105,4 +104,7 @@ class TaskViewModel(private val repository: TaskRepository) : ViewModel() {
     fun deleteAllTaskByCategory(categoryType: CategoryType) = viewModelScope.launch {
         repository.deleteAllTaskByCategory(categoryType)
     }
+
+    fun todayTasks() = repository.todayTask()
+
 }

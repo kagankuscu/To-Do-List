@@ -6,6 +6,10 @@ import java.util.*
 object SimpleDateFormat {
 
     fun formatTime(dateTime: Long): String {
-        return SimpleDateFormat("hh:mm a", Locale.UK).format(dateTime)
+        return SimpleDateFormat("HH:mm", Locale.UK).format(dateTime)
+    }
+
+    fun formatDate(dateTime: Long): String {
+        return SimpleDateFormat("yyyy-MM-dd", Locale.UK).format(dateTime)
     }
 }
